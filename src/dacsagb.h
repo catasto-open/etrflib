@@ -1,12 +1,23 @@
 #pragma once
-#include <stdio.h>
+#include <cstdio>
 #include <string>
+#include <iostream>
+//#include <filesystem>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <cmath>
 #include <climits>
-#include <limits.h>
+#include <cstdio>
 #include <iostream>
 #include <cstdlib>
+#include <vector>
+#include <cassert>
+#include <fstream>
+#include <dirent.h>
 using namespace std;
+
+//namespace fs = std::filesystem;
 #define VALORE_NUMERICO_NULLO  (double)9999999999.0000000
 /* funzioni di utilit� generale*/
 double dasag(double ang); //da sessaggesimali a centesimali
@@ -22,8 +33,8 @@ double adjang400(double ang);
 
 /*parametri datum geodetico*/
 #define awgs84 6378137.0e0
-#define e2wgs84 0.006694380e0
-
+#define bwgs84  6356752.31414e0
+#define e2wgs84 (awgs84* awgs84 -bwgs84 * bwgs84) / (awgs84 * awgs84)
 #define ahi  6378388.0e0
 #define bhi  6356911.946
 #define e2hi (ahi* ahi - bhi * bhi) / ahi / ahi
@@ -87,9 +98,11 @@ public:
 
   double NordFE, EstFE;   //coordinate Gauss-Boaga su ellissoide Hayford fuso est
   double NordFO, EstFO;   //coordinate Gauss-Boaga su ellissoide Hayford fuso oves
+  double NordUTM, EstUTM;   //coordinate UTM ETRF2000 
   double crid;           //coefficiente di contrazione 
   double lfi(); //menbro integrale ellittico
   void NEgb(double f, double l, bool MM = true); //Nord Est Gauss-Boaga  l relativa a MomteMario se MM=true
+  void NEutm(double f, double l, int & fuso); //Nord Est UTM  l relativa a Greenwitch
   void FiLagb(double N, double E, double& fi, double& la); //calcola fi e lamda hayford da nORD ED eST gb
   void DaCSaWgs84(double n, double e, double q, double* xw, double* yw, double* zw);                                       //                      l relativa a Greenwich se MM=FALSE     
   void DaGBaWgs84(double n, double e, double q, double* xw, double* yw, double* zw);                                       //                      l relativa a Greenwich se MM=FALSE     
@@ -119,6 +132,34 @@ public:
 #define ddd_mm_ss 0x00000010
 #define ddd_dddd  0x00000020
 /* classe generale per la trasformazione di coordinate e datum*/
+
+struct _POINT
+{
+  double estcs;
+  double nordcs;
+  double locs;
+  double fics;
+  double logb;
+  double figb;
+  double estgbFE;
+  double nordgbFE;
+  double estgbFO;
+  double nordgbFO;
+  double lo2000;
+  double fi2000;
+  double estUTM;
+  double nordUTM;
+  int fuso;
+};
+
+typedef  _POINT _point;
+#define o_u_s  0x00000000 //uscito in sessaggesimali
+#define o_u_r  0x00000001 //uscita in radianti
+#define o_u_c  0x00000002 //uscita in centesimali
+#define o_u_d  0x00000003 //uscita in decimali
+#define o_u_p  0x00000004 //uscita in coordinate piane
+
+
 class dacsagb
 {
   public:
@@ -133,6 +174,16 @@ class dacsagb
   double fiGB;
   double laGB;
   string messaggio;
+  string nomefilecxf;
+  string nomefilelog;
+  string  nomefileout;
+  string  cartellageo;
+  string file_gsb; //file con le correzioni da roma40 a etrf2000
+  bool ses;
+  bool rad;
+  bool deg;
+  bool cent;
+  bool piane;
 
   int op;
   /*
@@ -150,18 +201,42 @@ class dacsagb
     fiGB=0e0;
     laGB=0e0;
     op = 0;
+    nomefilecxf.clear();
+    nomefilelog.clear();
+    nomefileout.clear();
+    cartellageo.clear();
+    file_gsb.clear();
+    ses = false;
+    rad = false;
+    deg = false;
+    cent = false;
+    piane = true;
   }
+public:
   dacsagb(double par1, double par2, int par3);
+
+  bool calcolaCXF(string filemp, string fileout, string filelog,string cartellagbs, int fmt);
+
 };
 
 #define FUSO_OVEST 0x00000001
 #define FUSO_EST 0x00000002
 
 bool DaPianeCSaFiLa(double est, double nord, double& la, double& fi, string & ms);
-void calcolo(double &estCS, double& nordCS, double& laCS, double& fiCS,double& estGB, double& nordGB, double& laGB, double& fiGB);
-int  est_nordCS_est_nordGB(double estCS, double nordCS, int fuso_richiesto,double& estGB, double& nordGB);
+void calcolo(double &estCS, double& nordCS, double& laCS, double& fiCS,double& estGBFE, double& nordGBFE, double& estGBFO, double& nordGBFO, double& laGB, double& fiGB);
+void calcolo(_POINT &p ,bool utm=false);
+// int  est_nordCS_est_nordGB(double estCS, double nordCS, int fuso_richiesto,double& estGB, double& nordGB);
 int  la_fiCS_la_fiGB(double laCS, double fiCS, int u, double& laGB, double& fiGB);
 int  la_fiCS_est_nordCS(double laCS, double fiCS, int u, double& estCS, double& nordCS);
 int  la_fiGB_est_nordGB(double laGB, double fiGB, int u, double& estGB, double& nordGB);
 int  est_nordCS_la_fiCS(double estCS, double nordCS, double& laCS, double& fiCS);
 int  est_nordGB_la_fiGB(double estGB, double nordGB, double& laGB, double& fiGB);
+
+
+
+string removfirstblanck(string a);
+
+bool calcolaunpunto(GRI_HDR* hh, double nordcs, double estcs, double& nordutm, double& estutm, int& fuso);
+
+extern string nomefilegriglia;
+

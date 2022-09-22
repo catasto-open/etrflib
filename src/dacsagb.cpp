@@ -1,11 +1,21 @@
+
+#include "interpola.h"
 #include "dacsagb.h"
+using namespace std;
+
+
 #include <limits.h>
+//ifstream impfilecxf;
+ofstream outfile;
+ofstream logfile;
 
-
+string nomefilegriglia="";
 double PI = (double)3.14159265358979323846264338327950; /* pigrego */
 double RGC = (double)(200e0 / PI); /* coeff da rad a GC */
 double ARCS = (PI / 180e0) / 60e0 / 60e0;
 
+double latitudine=VALORE_NUMERICO_NULLO;
+double longitudine= VALORE_NUMERICO_NULLO;
 double dasag(double ang) //da sessaggesimali a centesimali
 {
   double ss, gg, mm, ret, angb;
@@ -404,6 +414,60 @@ void Geodesia::NEgb(double f, double l, bool MM)
   EstFE += 2520000.0;
 }
 
+void Geodesia::NEutm(double f, double l, int & fuso)// angoli in sessagesimali
+{
+  SetEllWgs84();
+  double lla = fabs(l);
+  double ll =dasag(lla) / RGC;
+  //calcolo del fuso
+  double ilf = l;
+  double mer_centr = 0e0;
+  if (6 < ilf && ilf <= 12)
+  {
+    fuso = 32;
+    mer_centr = 9.0;
+  }
+  if (12 < ilf && ilf <= 18)
+  {
+    fuso = 33;
+    mer_centr = 15.0;
+  }
+  if (18 < ilf && ilf <= 24)
+  {
+    fuso = 34;
+    mer_centr = 21.0;
+  }
+
+
+  double lo = ll - dasag(mer_centr) / RGC;
+  ll *= RGC;
+  ll = dagas(ll);
+  l = ll;
+  lo *= RGC;
+ 
+  if (lo > 0)
+    lo = dagas(lo);
+  else
+    lo = -dagas(fabs(lo));
+ 
+
+  //1) calcolo 
+  calcola(i_u_s, f, lo); //setta tutte le grandezze
+  double lf = lfi();
+  NordUTM = lf;
+  double t = tan(fi);
+  double eta = (GN - ro) / ro;
+  NordUTM += pow(_lambda, 2) * (GN * sin(fi) * cos(fi)) / 2;
+  NordUTM += pow(_lambda, 4) * (GN * sin(fi) * pow(cos(fi), 3)) * (5 - t * t + 9 * eta + 4 * eta * eta) / 24;
+  NordUTM += pow(_lambda, 6) * (GN * sin(fi) * pow(cos(fi), 5)) * (61 - 58 * t * t + pow(t, 4)) / 720;
+  NordUTM *= crid;
+  EstUTM = _lambda * GN * cos(fi);
+  EstUTM += pow(_lambda, 3) * GN * pow(cos(fi), 3) * (1 - t * t + eta) / 6;
+  EstUTM += pow(_lambda, 5) * GN * pow(cos(fi), 5) * (5 - 18 * t * t + pow(t, 4)) / 120;
+  EstUTM *= crid;
+  EstUTM += 500000.0;
+}
+
 
 double Geodesia::lfi() //integrazione arco di meridiano
 {
@@ -540,8 +604,8 @@ void Geodesia::DaCSaWgs84(double n, double e, double q, double* xw, double* yw, 
   double epsilon1 = s * s * sin(alfa) * cos(alfa) / (6 * ro * GN);
   double xie = s * sin(alfa - epsilon1);
   double yie = s * cos(alfa - 2 * epsilon1);
-  double d = xie - e;
-  d = yie - n;
+ // double d = xie - e;
+//  d = yie - n;
   double gn2 = GN;
   calcola();
   xie = (dasar(lap) - _lambda) * gn2 * cos(dasar(fip));
@@ -602,10 +666,10 @@ double Geodesia::fis(double s, double alfa, int un)
   double cosf2 = cosf * cosf;
   double tanf = tan(fi);
   double tanf2 = tanf * tanf;
-  double tanf3 = pow(tanf, 3);
+//  double tanf3 = pow(tanf, 3);
   double GN2 = GN * GN;
   double a2 = a * a;
-  double a3 = pow(a, 3);
+ // double a3 = pow(a, 3);
   double r2 = r * r;
   double sinalfa = sin(alfa);
   double sinalfa2 = pow(sinalfa, 2);
@@ -665,7 +729,7 @@ double Geodesia::fis(double s, double alfa, int un)
   ffc -= GN * sin2f / (4 * ro) * pow(q, 2);
   ffc += (ecc * GN2 / (2 * a2) * (ecc * GN2 * sin2f2) / (a2)-cos(2 * fi)) * pow(p, 3);
   ffc += (1 / 6) * ((r * r * GN / (ro * a2) * (10 * ecc * sinf2 - 1) - 3 * sinf2)) * p * pow(q, 2);
-  double diff = (fff - ffc) / ARCS;
+ // double diff = (fff - ffc) / ARCS;
   //nuova serie
 
 
@@ -698,7 +762,7 @@ double Geodesia::fis(double s, double alfa, int un)
   double d2f_dx2 = (-(3 * e * ca * cf * sf * W * df_dx) / (e12 * a)) - (sa * da_dx * W3) / (e12 * a);
   ;
   ;
-  double d2f_dx2_p = -(sinf / ro) * (sinalfa2 / (GN * cosf) + (3 * e * cosf * cosalfa2) / (ro * W2));
+  //double d2f_dx2_p = -(sinf / ro) * (sinalfa2 / (GN * cosf) + (3 * e * cosf * cosalfa2) / (ro * W2));
   //derivata 2 di a in dx variabile d2a_dx2;
   ;
   ;
@@ -848,11 +912,11 @@ double Geodesia::fis(double s, double alfa, int un)
   d5f_dx5 += (6 * sa * pow(da_dx, 2) * d2a_dx2 * W3) / (e12 * a);
   d5f_dx5 += (ca * pow(da_dx, 4) * W3) / (e12 * a);
 
-  double tt1 = fi + df_dx * s;
-  double tt2 = d2f_dx2 * pow(s, 2) / 2;
-  double tt3 = d3f_dx3 * pow(s, 3) / 6;
-  double tt4 = d4f_dx4 * pow(s, 4) / 24;
-  double tt5 = d5f_dx5 * pow(s, 5) / 120;
+//  double tt1 = fi + df_dx * s;
+// double tt2 = d2f_dx2 * pow(s, 2) / 2;
+// double tt3 = d3f_dx3 * pow(s, 3) / 6;
+// double tt4 = d4f_dx4 * pow(s, 4) / 24;
+// double tt5 = d5f_dx5 * pow(s, 5) / 120;
 
 
   return fff;
@@ -861,7 +925,7 @@ double Geodesia::fis(double s, double alfa, int un)
 double Geodesia::las(double s, double alfa, int un)
 {
   alfa = ang_conv(alfa, un);
-  double fff = 0;
+
   if (abs(sin(alfa)) < __DBL_EPSILON__) //cammina lungo il meridiano
     return _lambda;
 
@@ -869,22 +933,25 @@ double Geodesia::las(double s, double alfa, int un)
   double t2 = pow(s, 2) * sin(fi) * sin(2 * alfa) / (2 * pow(GN, 2) * pow(cos(fi), 2));
   double t3 = pow(s, 3) / (6 * pow(GN, 2) * cos(fi));
   t3 *= (sin(2 * alfa) * cos(alfa) / ro + 2 * pow(tan(fi), 2) * sin(3 * alfa) / GN);
-  fff = t1 + t2 + t3;
+  double fff = t1 + t2 + t3;
 
   double p = s * cos(alfa) / ro;
   double q = s * sin(alfa) / r;
-  double sin2f = sin(2e0 * fi);
-  double sin2f2 = sin2f * sin2f;
+ // double sin2f = sin(2e0 * fi);
+ // double sin2f2 = sin2f * sin2f;
   double sinf = sin(fi);
   double sinf2 = sinf * sinf;
-  double GN2 = GN * GN;
-  double a = semiasse;
-  double a2 = a * a;
+//  double GN2 = GN * GN;
+//  double a = semiasse;
+//  double a2 = a * a;
   double ffc = _lambda + q;
   ffc += (ro * sinf / r) * p * q;
   ffc += (ro / r) * ((ro / r) * sinf2 + cos(fi) / 3) * pow(p, 2) * q;
   ffc -= (sinf2 / 3) * pow(q, 3);
+#ifdef _DEBUG
   double diff = (fff - ffc) / ARCS;
+  cout << diff;
+#endif
   return ffc;
 
 
@@ -914,7 +981,7 @@ void Geodesia::fi_la_step(double s, double alfa, double& la, double& lo, int un)
       ss += ss_i;
       if (ss > s) break;
     }
-    double sss = ss - s;
+ //   double sss = ss - s;
   }
   else
   {
@@ -924,8 +991,8 @@ void Geodesia::fi_la_step(double s, double alfa, double& la, double& lo, int un)
     double ss = 0;
     for (int i = 0; i < 4; i++)
     {
-      double lo_a = lo;
-      double fi_a = fi;
+ //     double lo_a = lo;
+//      double fi_a = fi;
       double alfa_a = alfa;
       lo = las(-ss_i, alfa, i_u_r);
       la = fis(-ss_i, alfa, i_u_r);
@@ -935,7 +1002,7 @@ void Geodesia::fi_la_step(double s, double alfa, double& la, double& lo, int un)
       ss += ss_i;
       if (abs(ss) > abs(s)) break;
     }
-    double sss = ss - s;
+ //   double sss = ss - s;
   }
   calcola(i_u_r, fi0, la0);
 }
@@ -1016,7 +1083,7 @@ void Geodesia::DaCSaGB(double fi_orig, double la_orig, double n, double e,
   //settiamo ellissoide di bessel
   SetAsse(6377397.155000);
   SetEcc(6.674372230000e-3);
-  double fi_bck = daras(fi); double la_bck = daras(_lambda);
+  //double fi_bck = daras(fi); double la_bck = daras(_lambda);
   calcola(i_u_r, (fi_orig), (la_orig)); //setta l'origine CS
 
   double lat, lon, s, az1, az2;
@@ -1122,15 +1189,19 @@ double Geodesia::cosec(double x) { return 1e0 / sin(x); }
 double Geodesia::lat_geoc() { return  atan(z / r); }
 double Geodesia::lat_ridotta(double lat)
 {
-  double actualfi = fi;
-  double actualla = _lambda;
+ // double actualfi = fi;
+ // double actualla = _lambda;
   calcola(i_u_r, lat, 0e0);
 
   double a = semiasse;
   double b = a * sqrt(1e0 - ecc);
-  double f = (a - b) / a;
+  
   double oe = 2e0 * atan(sqrt((a - b) / (a + b)));
+#ifdef _DEBUG
+  double f = (a - b) / a;
   double vf = 1e0 - cos(oe) - f;
+  cout << vf;
+#endif
   double latg = lat_geoc();
   double u = sec(oe) * tan(latg);
   u = atan(u);
@@ -1158,13 +1229,439 @@ dacsagb::dacsagb(double par1, double par2, int par3)
   {
     double par3= VALORE_NUMERICO_NULLO, par4= VALORE_NUMERICO_NULLO,
       par5= VALORE_NUMERICO_NULLO, par6= VALORE_NUMERICO_NULLO, par7= VALORE_NUMERICO_NULLO, par8 = VALORE_NUMERICO_NULLO;
-    calcolo(par1, par2, par3, par4, par5, par6,par7,par8);
+    double par9 = VALORE_NUMERICO_NULLO, par10 = VALORE_NUMERICO_NULLO;
+    calcolo(par1, par2, par3, par4, par5, par6,par7,par8,par9,par10);
 
   }
 
 
 }
 
+bool dacsagb::calcolaCXF(std::string filemp, std::string fileout, std::string filelog, std::string cartellagbs,int fmt)
+{
+
+ 
+  string nomemappa;
+  GRI_HDR* h;
+  FILE *impfilecxf;
+
+
+  switch(fmt)
+{ 
+  case(o_u_s):
+      ses = true;
+  break;
+  case(o_u_r):  
+    rad = true;
+  break;
+
+  case(o_u_c):
+    cent = true;
+  break;
+
+  case(o_u_d):
+    deg = true;
+  break;
+
+  case(o_u_p):
+    piane = true;
+  break;
+  default:
+    piane = true;
+
+}
+  struct stat buff_stat;
+nomefilecxf = filemp; nomefileout = fileout; nomefilelog = filelog; cartellageo = cartellagbs;
+
+  if (nomefilelog.at(0) == '\0') nomefilelog = "default.log";
+  
+  if(-1!=stat(nomefilelog.c_str(), &buff_stat))
+  {
+    remove(nomefilelog.c_str());
+  }
+  /*
+  else
+  {
+    
+    printf("File type:                ");
+
+    switch (buff_stat.st_mode & S_IFMT) {
+    case S_IFBLK:  printf("block device\n");            break;
+    case S_IFCHR:  printf("character device\n");        break;
+    case S_IFDIR:  printf("directory\n");               break;
+    case S_IFIFO:  printf("FIFO/pipe\n");               break;
+    case S_IFLNK:  printf("symlink\n");                 break;
+    case S_IFREG:  printf("regular file\n");            break;
+    case S_IFSOCK: printf("socket\n");                  break;
+    default:       printf("unknown?\n");                break;
+    }
+
+    printf("I-node number:            %ld\n", (long)buff_stat.st_ino);
+
+    printf("Mode:                     %lo (octal)\n",
+      (unsigned long)buff_stat.st_mode);
+
+    printf("Link count:               %ld\n", (long)sb.st_nlink);
+    printf("Ownership:                UID=%ld   GID=%ld\n",
+      (long)sb.st_uid, (long)buff_stat.st_gid);
+
+    printf("Preferred I/O block size: %ld bytes\n",
+      (long)buff_stat.st_blksize);
+    printf("File size:                %lld bytes\n",
+      (long long)buff_stat.st_size);
+    printf("Blocks allocated:         %lld\n",
+      (long long)buff_stat.st_blocks);
+
+    printf("Last status change:       %s", ctime(&buff_stat.st_ctime));
+    printf("Last file access:         %s", ctime(&buff_stat.st_atime));
+    printf("Last file modification:   %s", ctime(&buff_stat.st_mtime));
+
+
+  }
+*/
+ 
+  logfile.open(nomefilelog, std::ios::out);
+  if (logfile.fail())
+  {
+    cout << "fallita apertura file" << nomefilelog;
+    return false;
+  }
+  if (-1 == stat(nomefilecxf.c_str(), &buff_stat))
+  {
+    if((buff_stat.st_mode& S_IFMT)== S_IFDIR)
+    {
+      logfile << "la cartella con i cxf " << nomefilecxf << " non esiste" << endl;
+    }
+    else
+    {
+      logfile << "il file cxf " << nomefilecxf << " non esiste" << endl;
+    }
+    logfile << "stop" << endl;
+    return -1; 
+  }
+  if (-1 == stat(nomefileout.c_str(), &buff_stat))
+  {
+    if ((buff_stat.st_mode & S_IFMT) == S_IFDIR)
+    {
+      logfile << "la cartella per i risultati " << nomefileout << " non esiste" << endl;
+      logfile << "stop" << endl;
+      return -1;
+    }
+    else
+    {
+      string elenco = nomefileout;
+      elenco += "/*.*";
+      remove(elenco.c_str());
+      logfile << "svuotata cartella " << nomefileout << endl;
+    }
+    logfile << "stop" << endl;
+    return -1;
+  }
+ 
+  if (-1 == stat(cartellageo.c_str(), &buff_stat))
+  {
+   
+    logfile << "la cartella con i grigliati " << cartellageo << " non esiste" << endl;
+    logfile << "stop" << endl;
+    return false;
+   }
+  cout << "file log " << nomefilelog << endl;
+  if ((buff_stat.st_mode & S_IFMT) == S_IFDIR)
+  {
+    logfile << "Cartella con i gligliati GeoServer " << cartellageo.c_str() << endl;
+  }
+  else
+    logfile << "Fil con i gligliati GeoServer " << cartellageo.c_str() << endl;
+  if (-1 == stat(nomefilecxf.c_str(), &buff_stat))
+  {
+    if ((buff_stat.st_mode & S_IFMT) == S_IFDIR)
+      logfile << "cartella con file CXF " << nomefilecxf << endl;
+    else
+      logfile << "file CXF " << nomefilecxf << endl;
+  }
+ 
+  logfile << " File con le coordinate trasformate" << nomefileout.c_str() << endl;
+  logfile << "formato output " << "ses = " << ses << " deg= " << deg << " piane= " << piane << endl;
+
+  
+  string ext = ".gsb";
+  string tipof = "R40_F00";
+  file_gsb.clear();
+  stat(cartellageo.c_str(), &buff_stat);
+  if ((buff_stat.st_mode & S_IFMT) == S_IFDIR)
+  {
+
+    struct dirent** namelist;
+    int n;
+    n = scandir(cartellageo.c_str(), &namelist, 0, alphasort);
+    if (n < 0)
+    {
+    }
+   
+    for (int k=0;k<n;k++)
+    {
+      string nmfile = namelist[k]->d_name;
+      cout << nmfile << endl;
+
+      if (nmfile.find(ext)!=string::npos)
+      {
+        
+        if (nmfile.find("R40_F00") != string::npos) //
+        {
+          file_gsb = nmfile;//trovato
+          nomefilegriglia = cartellageo + "/" + file_gsb;
+          break;
+        }
+      }
+    }
+  }
+  else
+  {
+    file_gsb = cartellageo;
+    nomefilegriglia = file_gsb;
+  }
+  int type=GRI_FILE_TYPE_BIN;
+  int *prc=NULL;
+  h = gri_load_file(nomefilegriglia.c_str(),false,true,NULL ,prc);
+ 
+  char buffer[100];
+  //recupero il nome della mmappa
+  string s = nomefilecxf;
+  auto pos = s.find_last_of('/');
+  string s1 = s.substr(pos + 1);
+  pos = s1.find_last_of('.');
+  nomemappa = s1.substr(0, pos + 1);
+
+  outfile.open(nomefileout, std::ios::out);
+  if (outfile.fail())
+  {
+    cout << "fallita apertura file" << nomefileout;
+    return -1;
+  }
+  impfilecxf = fopen(nomefilecxf.c_str(), "r");
+  if (impfilecxf==NULL)
+  {
+    cout << "fallita apertura file" << nomefilecxf;
+    return -1;
+  }
+
+  vector<string> linp;
+  /*riga per riga*/
+  while (!feof(impfilecxf))
+  {
+    fgets(buffer, 100, impfilecxf);
+     cout << buffer << endl;
+    string sb = buffer;
+    linp.push_back(buffer);
+  }
+  fclose(impfilecxf);
+  double estUTM, nordUTM;
+  int fuso;
+  for (auto p = linp.begin(); p < linp.end(); p++)
+  {
+    /* vediamo se è un valore coordinate*/
+    if ((*p).find("MAPPA") != string::npos || (*p).find("QUADRO") != string::npos)
+    {
+      outfile << (*p).c_str() << endl; //etichetta mappa
+      p++;
+      outfile << (*p).c_str() << endl;//nome mappa
+      p++;
+      outfile << (*p).c_str() << endl;//scala
+    }
+    if ((*p).find("BORDO") != string::npos)
+    {
+      outfile << (*p).c_str() << endl; //Bordo
+      p++;
+      string etichetta = *p;
+      outfile << (*p).c_str() << endl;//dentificativo bordo
+      p++;
+      outfile << (*p).c_str() << endl;//scala
+      p++;
+      outfile << (*p).c_str() << endl;//angolo
+      p++;
+      double  POSIZIONEX = atof((*p).c_str());
+      p++;
+      double  POSIZIONEY = atof((*p).c_str());
+      calcolaunpunto(h, POSIZIONEX, POSIZIONEY, nordUTM, estUTM, fuso);
+      outfile.width(12);outfile.precision(3);
+      outfile << fixed<< right<<estUTM << endl;
+      outfile.width(12); outfile.precision(3);
+      outfile << fixed<< right<<nordUTM << endl;
+      p++;
+      double  POSIZIONEPUNTOINTERNOX = atof((*p).c_str());
+      p++;
+      double  POSIZIONEPUNTOINTERNOY = atof((*p).c_str());
+      calcolaunpunto(h, POSIZIONEPUNTOINTERNOX, POSIZIONEPUNTOINTERNOX, nordUTM, estUTM, fuso);
+      outfile.width(12); outfile.precision(3);
+      outfile << fixed << right << estUTM << endl;
+      outfile.width(12); outfile.precision(3);
+      outfile << fixed << right << nordUTM << endl;
+      p++;
+      outfile << (*p).c_str() << endl;//numero isole
+      int num_isole = atoi((*p).c_str());
+      p++;
+      outfile << (*p).c_str() << endl;//numero vertici
+      int num_vertici = atoi((*p).c_str());
+      if (num_isole > 0)
+      {
+        for (int k = 0; k < num_isole; k++)
+        {
+          p++;
+          int num_vertici_isole = atoi((*p).c_str());
+          outfile << (*p).c_str() << endl;//numero vertici k-ma isola
+        }
+      }
+      for (int i = 0; i < num_vertici; i++)
+      {
+        p++;
+        POSIZIONEX = atof((*p).c_str());
+        p++;
+        POSIZIONEY = atof((*p).c_str());
+        calcolaunpunto(h, POSIZIONEX, POSIZIONEY, nordUTM, estUTM, fuso);
+        outfile.width(12); outfile.precision(3);
+        outfile << fixed << right << estUTM << endl;
+        outfile.width(12); outfile.precision(3);
+        outfile << fixed << right << nordUTM << endl;
+        
+      }
+    }
+    if ((*p).find("TESTO") != string::npos)
+    {
+      outfile << (*p).c_str() << endl; //etichetta testo
+      p++;
+      outfile << (*p).c_str() << endl;//contenuto
+      p++;
+      outfile << (*p).c_str() << endl;//dimensione
+      p++;
+      outfile << (*p).c_str() << endl;//angolo
+      p++;
+      double estGB, nordGB;
+      double  POSIZIONEX = atof((*p).c_str());
+      p++;
+      double  POSIZIONEY = atof((*p).c_str());
+      bool rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, nordUTM, estUTM, fuso);
+      outfile.width(12); outfile.precision(3);
+      outfile << fixed << right << estUTM << endl;
+      outfile.width(12); outfile.precision(3);
+      outfile << fixed << right << nordUTM << endl;
+    }
+    if ((*p).find("SIMBOLO") != string::npos)
+    {
+      outfile << (*p).c_str() << endl; //etichettaSIMBOLO
+      p++;
+      outfile << (*p).c_str() << endl;//codice del simbolo
+      p++;
+      outfile << (*p).c_str() << endl;//angolo
+      p++;
+      double estGB, nordGB;
+      double  POSIZIONEX = atof((*p).c_str());
+      p++;
+      double  POSIZIONEY = atof((*p).c_str());
+      bool rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, nordUTM, estUTM, fuso);
+      outfile.width(12); outfile.precision(3);
+      outfile << fixed << right << estUTM << endl;
+      outfile.width(12); outfile.precision(3);
+      outfile << fixed << right << nordUTM << endl;
+    }
+    if ((*p).find("FIDUCIALE") != string::npos)
+    {
+      outfile << (*p).c_str() << endl; //etichetta FIDUCIALE
+      p++;
+      outfile << (*p).c_str() << endl;//codice del fiduciale
+      p++;
+      outfile << (*p).c_str() << endl;//angolo
+      p++;
+      double estGB, nordGB;
+      double  POSIZIONEX = atof((*p).c_str());
+      p++;
+      double  POSIZIONEY = atof((*p).c_str());
+      int rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, nordUTM, estUTM, fuso);
+      outfile.width(12); outfile.precision(3);
+      outfile << fixed << right << estUTM << endl;
+      outfile.width(12); outfile.precision(3);
+      outfile << fixed << right << nordUTM << endl;
+      p++;
+      double  POSIZIONEPUNTOINTERNOX = atof((*p).c_str());
+      p++;
+      double  POSIZIONEPUNTOINTERNOY = atof((*p).c_str());
+      rt = calcolaunpunto(h,POSIZIONEPUNTOINTERNOX, POSIZIONEPUNTOINTERNOY, nordUTM, estUTM, fuso);
+      outfile.width(12); outfile.precision(3);
+      outfile << fixed << right << estUTM << endl;
+      outfile.width(12); outfile.precision(3);
+      outfile << fixed << right << nordUTM << endl;
+    }
+    if ((*p).find("LINEA") != string::npos)
+    {
+      outfile << (*p).c_str() << endl; //LINEA
+      p++;
+      outfile << (*p).c_str() << endl;//tipo tratto
+      p++;
+      outfile << (*p).c_str() << endl;//numero vertici
+      int num_vertici = atoi((*p).c_str());
+      for (int i = 0; i < num_vertici; i++)
+      {
+        p++;
+        double POSIZIONEX = atof((*p).c_str());
+        p++;
+        double POSIZIONEY = atof((*p).c_str());
+        int rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, nordUTM, estUTM, fuso);
+        outfile.width(12); outfile.precision(3);
+        outfile << fixed << right << estUTM << endl;
+        outfile.width(12); outfile.precision(3);
+        outfile << fixed << right << nordUTM << endl;
+
+      }
+    }
+    if ((*p).find("RIFERIMENTO_RASTER") != string::npos)
+    {
+      outfile << (*p).c_str() << endl; //etichetta RIFERIMENTO_RASTER
+      p++;
+      outfile << (*p).c_str() << endl;//nome del RIFERIMENTO_RASTER
+      for (int i = 0; i < 4; i++)
+      {
+        p++;
+        double POSIZIONEX = atof((*p).c_str());
+        p++;
+        double POSIZIONEY = atof((*p).c_str());
+        int rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, nordUTM, estUTM, fuso);
+        outfile.width(12); outfile.precision(3);
+        outfile << fixed << right << estUTM << endl;
+        outfile.width(12); outfile.precision(3);
+        outfile << fixed << right << nordUTM << endl;
+      }
+    }
+    if ((*p).find("LIBRETTO") != string::npos)
+    {
+      outfile << (*p).c_str() << endl; //LIBRETTO
+      p++;
+      outfile << (*p).c_str() << endl;//potocollo
+      p++;
+      outfile << (*p).c_str() << endl;//tipo tratto
+      p++;
+      outfile << (*p).c_str() << endl;//numero vertici
+      int num_vertici = atoi((*p).c_str());
+      for (int i = 0; i < num_vertici; i++)
+      {
+        p++;
+        double POSIZIONEX = atof((*p).c_str());
+        p++;
+        double POSIZIONEY = atof((*p).c_str());
+        int rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, nordUTM, estUTM, fuso);
+        outfile.width(12); outfile.precision(3);
+        outfile << fixed << right << estUTM << endl;
+        outfile.width(12); outfile.precision(3);
+        outfile << fixed << right << nordUTM << endl;
+      }
+    }
+  }
+  ;
+ 
+  outfile << "EOF" << endl;
+  outfile.close();
+  logfile.close();
+  gri_delete(h);
+  return true;
+}
 bool DaPianeCSaFiLa(double est, double nord, double& la, double& fi, string & ms)
 {
   /* */
@@ -1174,7 +1671,7 @@ bool DaPianeCSaFiLa(double est, double nord, double& la, double& fi, string & ms
   ms = c.messaggio;
   return true;
 }
-int  est_nordCS_est_nordGB(double estCS, double nordCS, int fuso_richiesto, double& estGB, double& nordGB)
+int  calcolaunpunto(double estCS, double nordCS, int fuso_richiesto, double& estGB, double& nordGB)
 {
   Geodesia gi;
   double n = nordCS;
@@ -1300,16 +1797,21 @@ int  est_nordCS_est_nordGB(double estCS, double nordCS, int fuso_richiesto, doub
   return 1; //OK
 
 }
-int  la_fiCS_la_fiGB(double laCS, double fiCS, int u, double& laGB, double& fiGB) {};
-int  la_fiCS_est_nordCS(double laCS, double fiCS, int u, double& estCS, double& nordCS) {};
-int  la_fiGB_est_nordGB(double laGB, double fiGB, int u, double& estGB, double& nordGB) {};
-int  est_nordCS_la_fiCS(double estCS, double nordCS, double& laCS, double& fiCS) {};
-int  est_nordGB_la_fiGB(double estGB, double nordGB, double& laGB, double& fiGB) {};
+int  la_fiCS_la_fiGB(double laCS, double fiCS, int u, double& laGB, double& fiGB) { return 0; };
+int  la_fiCS_est_nordCS(double laCS, double fiCS, int u, double& estCS, double& nordCS) { return 0; };
+int  la_fiGB_est_nordGB(double laGB, double fiGB, int u, double& estGB, double& nordGB) { return 0; };
+int  est_nordCS_la_fiCS(double estCS, double nordCS, double& laCS, double& fiCS) { return 0; };
+int  est_nordGB_la_fiGB(double estGB, double nordGB, double& laGB, double& fiGB) { return 0; };
 
 
 
 
-void calcolo(double& estCS, double& nordCS, double& laCS, double& fiCS, double& estGB, double& nordGB, double& laGB, double& fiGB)
+void calcolo(
+  double& estCS, double& nordCS, 
+  double& loCS, double& fiCS, 
+  double& estGBFE, double& nordGBFE, 
+  double& estGBFO, double& nordGBFO,
+  double& loGB, double& fiGB)
 {
     /*
    Geodesia controllo;
@@ -1340,12 +1842,9 @@ void calcolo(double& estCS, double& nordCS, double& laCS, double& fiCS, double& 
   Hayford.Direct(latMm, lonMm, az1, s12 / m, lat, lon);
   controllo.NEgb(dasdas(lat), dasdas(lon), FALSE);*/
     double n, e;
-  /*calcola gli elementi che non sono VALORE_NUMERICO_NULLO*/
-    if (estGB == VALORE_NUMERICO_NULLO && nordGB == VALORE_NUMERICO_NULLO)
-    {
-      e = estCS;
-      n = nordCS;
-    }
+    e = estCS;
+    n = nordCS;
+
     
 
 
@@ -1397,8 +1896,6 @@ void calcolo(double& estCS, double& nordCS, double& laCS, double& fiCS, double& 
     double semiasse2 = semiasse * semiasse;
     double ecc = gi.ecc;
     double lat_mia , lon_mia , az1_mia, az2_mia;
-    double lat_mia0 = lat_mia;
-    double lon_mia0 = lon_mia;
     gi.calcola(i_u_d, latMm_b_su_genova, lonMm_b_su_genova);
     //trasporto geografiche problema diretto 
     if (n > 0)
@@ -1411,6 +1908,8 @@ void calcolo(double& estCS, double& nordCS, double& laCS, double& fiCS, double& 
       lat_mia = gi.fis(-n, PI, i_u_r);
       lon_mia = gi.las(-n, PI, i_u_r);
     }
+    double lat_mia0 = lat_mia;
+    double lon_mia0 = lon_mia;
     //settiamo ellissoide di bessel
     gi.calcola(i_u_r, lat_mia, lon_mia);
     if (e > 0)
@@ -1489,11 +1988,17 @@ void calcolo(double& estCS, double& nordCS, double& laCS, double& fiCS, double& 
 
       cout.width(10);
       cout.precision(8);
- 
+      loGB = lon_hayford;
+      fiGB = lat_hayford;
+      loCS = lon_bessel;
+      fiCS = lat_bessel;
+      geo.NEgb(lat_hayford, lon_hayford, false);
+      nordGBFE = geo.NordFE; estGBFE = geo.EstFE;
+      nordGBFO = geo.NordFO; estGBFO = geo.EstFO;
+#ifdef _DEBUG
       cout <<  " " << fixed << " nord " << n << " est " << e << " lat " << lat_bessel << " lon " << lon_bessel<< endl;
       cout << "                                                   lat " << lat_hayford << " lon " << lon_hayford << endl;
-      geo.NEgb(lat_hayford, lon_hayford, false);
-      nordGB = geo.NordFE; estGB = geo.EstFO;
+ 
       cout << " Nord Fuso Ovest " << geo.NordFO << " Est Fuso Ovest " << geo.EstFO << endl;
       cout << " Nord Fuso Est   " << geo.NordFE << " Est Fuso Est   " << geo.EstFE << endl;
       cout << "----------------------------------------------------------------------------------------------------------------------------------" << endl;
@@ -1506,7 +2011,7 @@ void calcolo(double& estCS, double& nordCS, double& laCS, double& fiCS, double& 
       char rs[400];
       sprintf(rs, "8|%s|%11.3f|%11.3f|%11.3f|%11.3f|", "punto", geo.NordFE, geo.EstFE, geo.NordFO, geo.EstFO);
       cout << rs << endl;
- 
+#endif
 
 
     //prova su lecce
@@ -1557,7 +2062,203 @@ void calcolo(double& estCS, double& nordCS, double& laCS, double& fiCS, double& 
 
 
 }
+void calcolo(_POINT &p,bool utm)
+{
+/*
+Geodesia controllo;
+controllo.NEgb(0e0, 15e0, FALSE);
+Geodesic Bessel(6377397.15, 1.0e0 / 299.15);
+Geodesic Hayford(6378388.0e0, 1.0e0 / 297.0);
+const double latMm = 41 + 55 / 60.0e0 + 25.51 / 60e0 / 60e0, lonMm = 12 + 27e0 / 60.0e0 + 8.40 / 60e0 / 60e0;
+const double latMm_b_su_genova = 41 + 55 / 60.0e0 + 24.399 / 60e0 / 60e0, lonMm_b_su_genova = 3 + 31e0 / 60.0e0 + 51.131 / 60e0 / 60e0;
+CassiniSoldner projcs(latMm_b_su_genova, lonMm_b_su_genova, Bessel);
+CassiniSoldner projhy(latMm, lonMm, Hayford);
+double lat, lon;
+projcs.Reverse(0e0,10000.0e0, lat, lon);
+dasdas(lat);
+dasdas(lon);
+double s12, az1, az2;
+double arc = Bessel.Inverse(latMm_b_su_genova, lonMm_b_su_genova, lat, lon, s12, az1, az2);
+dasdas(lat);
+dasdas(lon);
+Hayford.Direct(latMm, lonMm, az1, s12, lat, lon);
+//riduzione alla corda
+controllo.NEgb(41.552551,12.270840, FALSE);
+double Norde = controllo.NordFE; double Este = controllo.EstFE-2520000.0e0;
+controllo.NEgb(dasdas(lat), dasdas(lon), FALSE);
+double eps12 = (controllo.NordFE - Norde) * (2 * (controllo.EstFE - 2520000.0) + Este) / (6 * controllo.ro * controllo.GN);
+double teta, ss, cd, sd, m, deltaalfa;
+angdor(0e0, 0e0, 0e0, 10000.0e0, ss, teta, cd, sd, m, deltaalfa);
+az1 = az1 + (eps12 + deltaalfa) * 180 / PI;
+Hayford.Direct(latMm, lonMm, az1, s12 / m, lat, lon);
+controllo.NEgb(dasdas(lat), dasdas(lon), FALSE);*/
+double n, e;
+/*calcola gli elementi che non sono VALORE_NUMERICO_NULLO*/
+  if (utm == false)
+  {
+    e = p.estcs;
+    n = p.nordcs;
+
+    char rr[300];
+    double d1, d2;
+    char mms[50];
+    Geodesia gi;
+
+    //settiamo ellissoide di bessel
+    gi.SetAsse(6377397.155000);
+    gi.SetEcc(6.674372230000e-3);
+    const double latMm = 41e0 + 55e0 / 60.0e0 + 25.51e0 / 60e0 / 60e0, lonMm = 12e0 + 27e0 / 60.0e0 + 8.40e0 / 60e0 / 60e0;
+    const double latMm_b_su_genova = 41e0 + 55e0 / 60.0e0 + 24.399e0 / 60e0 / 60e0, lonMm_b_su_genova = 3e0 + 31e0 / 60.0e0 + 51.131 / 60e0 / 60e0;
+    gi.calcola(i_u_d, latMm_b_su_genova, lonMm_b_su_genova);
+    // gi.calcola(42.071627, 0.000000);
+    double N0 = gi.GN;
+    double N02 = N0 * N0;
+    double Ro0 = gi.ro;
+    double R0 = gi.r;
+    double la_0 = gi._lambda;
+    double fi_0 = gi.fi;
+    double semiasse = gi.semiasse;
+    double semiasse2 = semiasse * semiasse;
+    double ecc = gi.ecc;
+    double lat_mia, lon_mia, az1_mia, az2_mia;
+    gi.calcola(i_u_d, latMm_b_su_genova, lonMm_b_su_genova);
+    //trasporto geografiche problema diretto 
+    if (n > 0)
+    {
+      lat_mia = gi.fis(n, 0e0, i_u_r);
+      lon_mia = gi.las(n, 0e0, i_u_r);
+    }
+    else
+    {
+      lat_mia = gi.fis(-n, PI, i_u_r);
+      lon_mia = gi.las(-n, PI, i_u_r);
+    }
+    double lat_mia0 = lat_mia;
+    double lon_mia0 = lon_mia;
+    //settiamo ellissoide di bessel
+    gi.calcola(i_u_r, lat_mia, lon_mia);
+    if (e > 0)
+    {
+      lon_mia = gi.las(e, PI / 2, i_u_r);
+      lat_mia = gi.fis(e, PI / 2, i_u_r);
+    }
+    else
+    {
+      lon_mia = gi.las(-e, 3 * PI / 2, i_u_r);
+      lat_mia = gi.fis(-e, 3 * PI / 2, i_u_r);
+    }
+    gi.calcola(i_u_r, lat_mia, lon_mia); //entra radianti
+    double d_f = gi.fi - fi_0;
+    double d_l = gi._lambda - la_0;
+    //d_f -=fi_0;
+    //d_l -=la_0;
+
+    double p_p = d_f;
+    p_p += (3e0 * ecc * N02 * sin(2e0 * fi_0)) / (4e0 * semiasse2) * d_f * d_f;
+    p_p += N0 * sin(2e0 * fi_0) / (4e0 * Ro0) * d_l * d_l;
+    p_p += (ecc * N02 / (2e0 * semiasse2)) * ((5e0 * ecc * N02 * pow(sin(2e0 * fi_0), 2e0)) / (4e0 * semiasse2) + cos(2e0 * fi_0)) * pow(d_f, 3e0);
+    p_p += (R0 * cos(fi_0) / (6e0 * Ro0) - pow(sin(fi_0), 2e0) / 2e0) * d_f * d_l * d_l;
+    double q_q = d_l;
+    q_q -= Ro0 * sin(fi_0) * d_l * d_f / R0;
+    q_q -= Ro0 * ((3e0 * ecc * N02 * pow(sin(fi_0), 2e0)) / (semiasse2)+2.0e0 / 3.0e0) / (2e0 * N0) * d_f * d_f * d_l;
+    q_q -= pow(sin(fi_0), 2e0) * pow(d_l, 3e0) / 6.0e0;
+    double azimutgeodetica = atan2((q_q * R0), (p_p * Ro0));
+
+    if (azimutgeodetica < 0) azimutgeodetica += 2e0 * PI;
+    double arcogeodeticab = p_p * Ro0 / cos(azimutgeodetica);
+    double arcogeodeticac = q_q * R0 / sin(azimutgeodetica);
+    double arcogeodetica = (arcogeodeticab + arcogeodeticac) / 2;
+    // double azses = daras(azimutgeodetica);
+    azimutgeodetica = (azimutgeodetica * 180 / PI);
+    double s12, az1, az2;
+    gi.SetAsse(6377397.155000);
+    gi.SetEcc(6.674372230000e-3);
+    double arco_bessel; double az1_bessel; double az2_bessel;
+    double arco_hayford; double az1_hayford; double az2_hayford;
+    double lat_bessel; double lon_bessel;
+    double lat_hayford; double lon_hayford;
+    gi.DaCSaGB(latMm_b_su_genova, lonMm_b_su_genova,
+      n, e, arco_bessel, az1_bessel, az2_bessel,
+      arco_hayford, az1_hayford, az2_hayford,
+      lat_bessel, lon_bessel,
+      lat_hayford, lon_hayford, i_u_d);
+    lat_bessel = daras(lat_bessel);
+    lon_bessel = daras(lon_bessel);
+    lat_hayford = daras(lat_hayford);
+    lon_hayford = daras(lon_hayford);
+
+    az1_bessel = daras(az1_bessel);
+    az2_bessel = daras(az2_bessel);
+    az1_hayford = daras(az1_hayford);
+    az2_hayford = daras(az2_hayford);
+
+
+    Geodesia geo;
+    p.logb = dasasd(lon_hayford);
+    p.figb = dasasd(lat_hayford);
+    p.locs = dasasd(lon_bessel);
+    p.fics = dasasd(lat_bessel);
+  
+    geo.NEgb(lat_hayford, lon_hayford, false);
+    p.nordgbFE = geo.NordFE; p.estgbFE = geo.EstFE;
+    p.nordgbFO = geo.NordFO; p.estgbFO = geo.EstFO;
+  }
+  else
+  {
+    Geodesia geo;
+    geo.SetEllWgs84();
+    int fuso = 0;
+    geo.NEutm(p.fi2000, p.lo2000, fuso);
+    p.nordUTM = geo.NordUTM;
+    p.estUTM = geo.EstUTM;
+    p.fuso = fuso;
+  }
+}
 
  
+string removfirstblanck(string a)
+{
+  auto pos = a.find(' ');
+  while (pos != string::npos)
+  {
+    a.erase(pos, 1);
+    pos = a.find(' ');
+  }
+  return a;
+}
 
 
+bool  calcolaunpunto(GRI_HDR* hh, double nordcs, double estcs, double& nordutm, double& estutm, int& fuso)
+{
+ 
+  if (hh ==GRI_NULL)
+  {
+    if (nomefilegriglia.empty())
+    {
+      return false;
+    }
+    int* prc=NULL;
+    hh = gri_load_file(nomefilegriglia.c_str(), false, true, NULL, prc);
+    if (hh->fp->fail())
+    {
+      return false;
+    }
+  }
+  _POINT p;
+  p.estcs = estcs;
+  p.nordcs = nordcs;
+  calcolo(p);
+  double fi_ingr = p.figb;
+  double lo_ingr = p.logb;
+  process_lat_lon(hh, fi_ingr, lo_ingr);
+  p.fi2000 = dasdas(fi_ingr);
+  p.lo2000 = dasdas(lo_ingr);
+  calcolo(p, true);
+  p.fi2000 = dasdas(fi_ingr);
+  p.lo2000 = dasdas(lo_ingr);
+  calcolo(p, true);
+  nordutm = p.nordUTM;
+  estutm = p.estUTM;
+  fuso = p.fuso;
+  return true;
+}

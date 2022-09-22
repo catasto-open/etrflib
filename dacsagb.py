@@ -61,6 +61,332 @@ class _SwigNonDynamicMeta(type):
     __setattr__ = _swig_setattr_nondynamic_class_variable(type.__setattr__)
 
 
+GRI_VERSION_MAJOR = _dacsagb.GRI_VERSION_MAJOR
+GRI_VERSION_MINOR = _dacsagb.GRI_VERSION_MINOR
+GRI_VERSION_RELEASE = _dacsagb.GRI_VERSION_RELEASE
+GRI_VERSION_STR = _dacsagb.GRI_VERSION_STR
+FALSE = _dacsagb.FALSE
+TRUE = _dacsagb.TRUE
+GRI_NULL = _dacsagb.GRI_NULL
+GRI_MAX_PATH_LEN = _dacsagb.GRI_MAX_PATH_LEN
+GRI_MAX_ERR_LEN = _dacsagb.GRI_MAX_ERR_LEN
+GRI_COORD_LON = _dacsagb.GRI_COORD_LON
+GRI_COORD_LAT = _dacsagb.GRI_COORD_LAT
+GRI_COORD_LAM = _dacsagb.GRI_COORD_LAM
+GRI_COORD_PHI = _dacsagb.GRI_COORD_PHI
+class gri_extent(object):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
+    __repr__ = _swig_repr
+    wlon = property(_dacsagb.gri_extent_wlon_get, _dacsagb.gri_extent_wlon_set)
+    slat = property(_dacsagb.gri_extent_slat_get, _dacsagb.gri_extent_slat_set)
+    elon = property(_dacsagb.gri_extent_elon_get, _dacsagb.gri_extent_elon_set)
+    nlat = property(_dacsagb.gri_extent_nlat_get, _dacsagb.gri_extent_nlat_set)
+
+    def __init__(self):
+        _dacsagb.gri_extent_swiginit(self, _dacsagb.new_gri_extent())
+    __swig_destroy__ = _dacsagb.delete_gri_extent
+
+# Register gri_extent in _dacsagb:
+_dacsagb.gri_extent_swigregister(gri_extent)
+
+GRI_NAME_LEN = _dacsagb.GRI_NAME_LEN
+GRI_FILE_BIN_EXTENSION = _dacsagb.GRI_FILE_BIN_EXTENSION
+GRI_FILE_ASC_EXTENSION = _dacsagb.GRI_FILE_ASC_EXTENSION
+GRI_FILE_TYPE_UNK = _dacsagb.GRI_FILE_TYPE_UNK
+GRI_FILE_TYPE_BIN = _dacsagb.GRI_FILE_TYPE_BIN
+GRI_FILE_TYPE_ASC = _dacsagb.GRI_FILE_TYPE_ASC
+class gri_file_ov(object):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
+    __repr__ = _swig_repr
+    n_num_orec = property(_dacsagb.gri_file_ov_n_num_orec_get, _dacsagb.gri_file_ov_n_num_orec_set)
+    i_num_orec = property(_dacsagb.gri_file_ov_i_num_orec_get, _dacsagb.gri_file_ov_i_num_orec_set)
+    p_num_orec = property(_dacsagb.gri_file_ov_p_num_orec_get, _dacsagb.gri_file_ov_p_num_orec_set)
+    n_num_srec = property(_dacsagb.gri_file_ov_n_num_srec_get, _dacsagb.gri_file_ov_n_num_srec_set)
+    i_num_srec = property(_dacsagb.gri_file_ov_i_num_srec_get, _dacsagb.gri_file_ov_i_num_srec_set)
+    p_num_srec = property(_dacsagb.gri_file_ov_p_num_srec_get, _dacsagb.gri_file_ov_p_num_srec_set)
+    n_num_file = property(_dacsagb.gri_file_ov_n_num_file_get, _dacsagb.gri_file_ov_n_num_file_set)
+    i_num_file = property(_dacsagb.gri_file_ov_i_num_file_get, _dacsagb.gri_file_ov_i_num_file_set)
+    p_num_file = property(_dacsagb.gri_file_ov_p_num_file_get, _dacsagb.gri_file_ov_p_num_file_set)
+    n_gs_type = property(_dacsagb.gri_file_ov_n_gs_type_get, _dacsagb.gri_file_ov_n_gs_type_set)
+    s_gs_type = property(_dacsagb.gri_file_ov_s_gs_type_get, _dacsagb.gri_file_ov_s_gs_type_set)
+    n_version = property(_dacsagb.gri_file_ov_n_version_get, _dacsagb.gri_file_ov_n_version_set)
+    s_version = property(_dacsagb.gri_file_ov_s_version_get, _dacsagb.gri_file_ov_s_version_set)
+    n_system_f = property(_dacsagb.gri_file_ov_n_system_f_get, _dacsagb.gri_file_ov_n_system_f_set)
+    s_system_f = property(_dacsagb.gri_file_ov_s_system_f_get, _dacsagb.gri_file_ov_s_system_f_set)
+    n_system_t = property(_dacsagb.gri_file_ov_n_system_t_get, _dacsagb.gri_file_ov_n_system_t_set)
+    s_system_t = property(_dacsagb.gri_file_ov_s_system_t_get, _dacsagb.gri_file_ov_s_system_t_set)
+    n_major_f = property(_dacsagb.gri_file_ov_n_major_f_get, _dacsagb.gri_file_ov_n_major_f_set)
+    d_major_f = property(_dacsagb.gri_file_ov_d_major_f_get, _dacsagb.gri_file_ov_d_major_f_set)
+    n_minor_f = property(_dacsagb.gri_file_ov_n_minor_f_get, _dacsagb.gri_file_ov_n_minor_f_set)
+    d_minor_f = property(_dacsagb.gri_file_ov_d_minor_f_get, _dacsagb.gri_file_ov_d_minor_f_set)
+    n_major_t = property(_dacsagb.gri_file_ov_n_major_t_get, _dacsagb.gri_file_ov_n_major_t_set)
+    d_major_t = property(_dacsagb.gri_file_ov_d_major_t_get, _dacsagb.gri_file_ov_d_major_t_set)
+    n_minor_t = property(_dacsagb.gri_file_ov_n_minor_t_get, _dacsagb.gri_file_ov_n_minor_t_set)
+    d_minor_t = property(_dacsagb.gri_file_ov_d_minor_t_get, _dacsagb.gri_file_ov_d_minor_t_set)
+
+    def __init__(self):
+        _dacsagb.gri_file_ov_swiginit(self, _dacsagb.new_gri_file_ov())
+    __swig_destroy__ = _dacsagb.delete_gri_file_ov
+
+# Register gri_file_ov in _dacsagb:
+_dacsagb.gri_file_ov_swigregister(gri_file_ov)
+
+class gri_file_sf(object):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
+    __repr__ = _swig_repr
+    n_sub_name = property(_dacsagb.gri_file_sf_n_sub_name_get, _dacsagb.gri_file_sf_n_sub_name_set)
+    s_sub_name = property(_dacsagb.gri_file_sf_s_sub_name_get, _dacsagb.gri_file_sf_s_sub_name_set)
+    n_parent = property(_dacsagb.gri_file_sf_n_parent_get, _dacsagb.gri_file_sf_n_parent_set)
+    s_parent = property(_dacsagb.gri_file_sf_s_parent_get, _dacsagb.gri_file_sf_s_parent_set)
+    n_created = property(_dacsagb.gri_file_sf_n_created_get, _dacsagb.gri_file_sf_n_created_set)
+    s_created = property(_dacsagb.gri_file_sf_s_created_get, _dacsagb.gri_file_sf_s_created_set)
+    n_updated = property(_dacsagb.gri_file_sf_n_updated_get, _dacsagb.gri_file_sf_n_updated_set)
+    s_updated = property(_dacsagb.gri_file_sf_s_updated_get, _dacsagb.gri_file_sf_s_updated_set)
+    n_s_lat = property(_dacsagb.gri_file_sf_n_s_lat_get, _dacsagb.gri_file_sf_n_s_lat_set)
+    d_s_lat = property(_dacsagb.gri_file_sf_d_s_lat_get, _dacsagb.gri_file_sf_d_s_lat_set)
+    n_n_lat = property(_dacsagb.gri_file_sf_n_n_lat_get, _dacsagb.gri_file_sf_n_n_lat_set)
+    d_n_lat = property(_dacsagb.gri_file_sf_d_n_lat_get, _dacsagb.gri_file_sf_d_n_lat_set)
+    n_e_lon = property(_dacsagb.gri_file_sf_n_e_lon_get, _dacsagb.gri_file_sf_n_e_lon_set)
+    d_e_lon = property(_dacsagb.gri_file_sf_d_e_lon_get, _dacsagb.gri_file_sf_d_e_lon_set)
+    n_w_lon = property(_dacsagb.gri_file_sf_n_w_lon_get, _dacsagb.gri_file_sf_n_w_lon_set)
+    d_w_lon = property(_dacsagb.gri_file_sf_d_w_lon_get, _dacsagb.gri_file_sf_d_w_lon_set)
+    n_lat_inc = property(_dacsagb.gri_file_sf_n_lat_inc_get, _dacsagb.gri_file_sf_n_lat_inc_set)
+    d_lat_inc = property(_dacsagb.gri_file_sf_d_lat_inc_get, _dacsagb.gri_file_sf_d_lat_inc_set)
+    n_lon_inc = property(_dacsagb.gri_file_sf_n_lon_inc_get, _dacsagb.gri_file_sf_n_lon_inc_set)
+    d_lon_inc = property(_dacsagb.gri_file_sf_d_lon_inc_get, _dacsagb.gri_file_sf_d_lon_inc_set)
+    n_gs_count = property(_dacsagb.gri_file_sf_n_gs_count_get, _dacsagb.gri_file_sf_n_gs_count_set)
+    i_gs_count = property(_dacsagb.gri_file_sf_i_gs_count_get, _dacsagb.gri_file_sf_i_gs_count_set)
+    p_gs_count = property(_dacsagb.gri_file_sf_p_gs_count_get, _dacsagb.gri_file_sf_p_gs_count_set)
+
+    def __init__(self):
+        _dacsagb.gri_file_sf_swiginit(self, _dacsagb.new_gri_file_sf())
+    __swig_destroy__ = _dacsagb.delete_gri_file_sf
+
+# Register gri_file_sf in _dacsagb:
+_dacsagb.gri_file_sf_swigregister(gri_file_sf)
+
+class gri_file_end(object):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
+    __repr__ = _swig_repr
+    n_end = property(_dacsagb.gri_file_end_n_end_get, _dacsagb.gri_file_end_n_end_set)
+    filler = property(_dacsagb.gri_file_end_filler_get, _dacsagb.gri_file_end_filler_set)
+
+    def __init__(self):
+        _dacsagb.gri_file_end_swiginit(self, _dacsagb.new_gri_file_end())
+    __swig_destroy__ = _dacsagb.delete_gri_file_end
+
+# Register gri_file_end in _dacsagb:
+_dacsagb.gri_file_end_swigregister(gri_file_end)
+
+class gri_file_gs(object):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
+    __repr__ = _swig_repr
+    f_lat_shift = property(_dacsagb.gri_file_gs_f_lat_shift_get, _dacsagb.gri_file_gs_f_lat_shift_set)
+    f_lon_shift = property(_dacsagb.gri_file_gs_f_lon_shift_get, _dacsagb.gri_file_gs_f_lon_shift_set)
+    f_lat_accuracy = property(_dacsagb.gri_file_gs_f_lat_accuracy_get, _dacsagb.gri_file_gs_f_lat_accuracy_set)
+    f_lon_accuracy = property(_dacsagb.gri_file_gs_f_lon_accuracy_get, _dacsagb.gri_file_gs_f_lon_accuracy_set)
+
+    def __init__(self):
+        _dacsagb.gri_file_gs_swiginit(self, _dacsagb.new_gri_file_gs())
+    __swig_destroy__ = _dacsagb.delete_gri_file_gs
+
+# Register gri_file_gs in _dacsagb:
+_dacsagb.gri_file_gs_swigregister(gri_file_gs)
+
+class gri_rec(object):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
+    __repr__ = _swig_repr
+    record_name = property(_dacsagb.gri_rec_record_name_get, _dacsagb.gri_rec_record_name_set)
+    parent_name = property(_dacsagb.gri_rec_parent_name_get, _dacsagb.gri_rec_parent_name_set)
+    parent = property(_dacsagb.gri_rec_parent_get, _dacsagb.gri_rec_parent_set)
+    sub = property(_dacsagb.gri_rec_sub_get, _dacsagb.gri_rec_sub_set)
+    next = property(_dacsagb.gri_rec_next_get, _dacsagb.gri_rec_next_set)
+    active = property(_dacsagb.gri_rec_active_get, _dacsagb.gri_rec_active_set)
+    num_subs = property(_dacsagb.gri_rec_num_subs_get, _dacsagb.gri_rec_num_subs_set)
+    rec_num = property(_dacsagb.gri_rec_rec_num_get, _dacsagb.gri_rec_rec_num_set)
+    num = property(_dacsagb.gri_rec_num_get, _dacsagb.gri_rec_num_set)
+    nrows = property(_dacsagb.gri_rec_nrows_get, _dacsagb.gri_rec_nrows_set)
+    ncols = property(_dacsagb.gri_rec_ncols_get, _dacsagb.gri_rec_ncols_set)
+    lat_min = property(_dacsagb.gri_rec_lat_min_get, _dacsagb.gri_rec_lat_min_set)
+    lat_max = property(_dacsagb.gri_rec_lat_max_get, _dacsagb.gri_rec_lat_max_set)
+    lat_inc = property(_dacsagb.gri_rec_lat_inc_get, _dacsagb.gri_rec_lat_inc_set)
+    lon_min = property(_dacsagb.gri_rec_lon_min_get, _dacsagb.gri_rec_lon_min_set)
+    lon_max = property(_dacsagb.gri_rec_lon_max_get, _dacsagb.gri_rec_lon_max_set)
+    lon_inc = property(_dacsagb.gri_rec_lon_inc_get, _dacsagb.gri_rec_lon_inc_set)
+    offset = property(_dacsagb.gri_rec_offset_get, _dacsagb.gri_rec_offset_set)
+    sskip = property(_dacsagb.gri_rec_sskip_get, _dacsagb.gri_rec_sskip_set)
+    nskip = property(_dacsagb.gri_rec_nskip_get, _dacsagb.gri_rec_nskip_set)
+    wskip = property(_dacsagb.gri_rec_wskip_get, _dacsagb.gri_rec_wskip_set)
+    eskip = property(_dacsagb.gri_rec_eskip_get, _dacsagb.gri_rec_eskip_set)
+    shifts = property(_dacsagb.gri_rec_shifts_get, _dacsagb.gri_rec_shifts_set)
+    accurs = property(_dacsagb.gri_rec_accurs_get, _dacsagb.gri_rec_accurs_set)
+
+    def __init__(self):
+        _dacsagb.gri_rec_swiginit(self, _dacsagb.new_gri_rec())
+    __swig_destroy__ = _dacsagb.delete_gri_rec
+
+# Register gri_rec in _dacsagb:
+_dacsagb.gri_rec_swigregister(gri_rec)
+
+class gri_hdr(object):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
+    __repr__ = _swig_repr
+    path = property(_dacsagb.gri_hdr_path_get, _dacsagb.gri_hdr_path_set)
+    file_type = property(_dacsagb.gri_hdr_file_type_get, _dacsagb.gri_hdr_file_type_set)
+    num_recs = property(_dacsagb.gri_hdr_num_recs_get, _dacsagb.gri_hdr_num_recs_set)
+    num_parents = property(_dacsagb.gri_hdr_num_parents_get, _dacsagb.gri_hdr_num_parents_set)
+    keep_orig = property(_dacsagb.gri_hdr_keep_orig_get, _dacsagb.gri_hdr_keep_orig_set)
+    pads_present = property(_dacsagb.gri_hdr_pads_present_get, _dacsagb.gri_hdr_pads_present_set)
+    swap_data = property(_dacsagb.gri_hdr_swap_data_get, _dacsagb.gri_hdr_swap_data_set)
+    fixed = property(_dacsagb.gri_hdr_fixed_get, _dacsagb.gri_hdr_fixed_set)
+    hdr_conv = property(_dacsagb.gri_hdr_hdr_conv_get, _dacsagb.gri_hdr_hdr_conv_set)
+    dat_conv = property(_dacsagb.gri_hdr_dat_conv_get, _dacsagb.gri_hdr_dat_conv_set)
+    gs_type = property(_dacsagb.gri_hdr_gs_type_get, _dacsagb.gri_hdr_gs_type_set)
+    lat_min = property(_dacsagb.gri_hdr_lat_min_get, _dacsagb.gri_hdr_lat_min_set)
+    lat_max = property(_dacsagb.gri_hdr_lat_max_get, _dacsagb.gri_hdr_lat_max_set)
+    lon_min = property(_dacsagb.gri_hdr_lon_min_get, _dacsagb.gri_hdr_lon_min_set)
+    lon_max = property(_dacsagb.gri_hdr_lon_max_get, _dacsagb.gri_hdr_lon_max_set)
+    recs = property(_dacsagb.gri_hdr_recs_get, _dacsagb.gri_hdr_recs_set)
+    first_parent = property(_dacsagb.gri_hdr_first_parent_get, _dacsagb.gri_hdr_first_parent_set)
+    fp = property(_dacsagb.gri_hdr_fp_get, _dacsagb.gri_hdr_fp_set)
+    mutex = property(_dacsagb.gri_hdr_mutex_get, _dacsagb.gri_hdr_mutex_set)
+    overview = property(_dacsagb.gri_hdr_overview_get, _dacsagb.gri_hdr_overview_set)
+    subfiles = property(_dacsagb.gri_hdr_subfiles_get, _dacsagb.gri_hdr_subfiles_set)
+
+    def __init__(self):
+        _dacsagb.gri_hdr_swiginit(self, _dacsagb.new_gri_hdr())
+    __swig_destroy__ = _dacsagb.delete_gri_hdr
+
+# Register gri_hdr in _dacsagb:
+_dacsagb.gri_hdr_swigregister(gri_hdr)
+
+GRI_ERR_OK = _dacsagb.GRI_ERR_OK
+GRI_ERR_NO_MEMORY = _dacsagb.GRI_ERR_NO_MEMORY
+GRI_ERR_IOERR = _dacsagb.GRI_ERR_IOERR
+GRI_ERR_NULL_HDR = _dacsagb.GRI_ERR_NULL_HDR
+GRI_ERR_FILE_NEEDS_FIXING = _dacsagb.GRI_ERR_FILE_NEEDS_FIXING
+GRI_ERR_START = _dacsagb.GRI_ERR_START
+GRI_ERR_INVALID_LAT_MIN_MAX = _dacsagb.GRI_ERR_INVALID_LAT_MIN_MAX
+GRI_ERR_INVALID_LON_MIN_MAX = _dacsagb.GRI_ERR_INVALID_LON_MIN_MAX
+GRI_ERR_INVALID_LAT_MIN = _dacsagb.GRI_ERR_INVALID_LAT_MIN
+GRI_ERR_INVALID_LAT_MAX = _dacsagb.GRI_ERR_INVALID_LAT_MAX
+GRI_ERR_INVALID_LAT_INC = _dacsagb.GRI_ERR_INVALID_LAT_INC
+GRI_ERR_INVALID_LON_INC = _dacsagb.GRI_ERR_INVALID_LON_INC
+GRI_ERR_INVALID_LON_MIN = _dacsagb.GRI_ERR_INVALID_LON_MIN
+GRI_ERR_INVALID_LON_MAX = _dacsagb.GRI_ERR_INVALID_LON_MAX
+GRI_ERR_UNRECOVERABLE_START = _dacsagb.GRI_ERR_UNRECOVERABLE_START
+GRI_ERR_INVALID_NUM_OREC = _dacsagb.GRI_ERR_INVALID_NUM_OREC
+GRI_ERR_INVALID_NUM_SREC = _dacsagb.GRI_ERR_INVALID_NUM_SREC
+GRI_ERR_INVALID_NUM_FILE = _dacsagb.GRI_ERR_INVALID_NUM_FILE
+GRI_ERR_INVALID_GS_TYPE = _dacsagb.GRI_ERR_INVALID_GS_TYPE
+GRI_ERR_INVALID_GS_COUNT = _dacsagb.GRI_ERR_INVALID_GS_COUNT
+GRI_ERR_INVALID_DELTA = _dacsagb.GRI_ERR_INVALID_DELTA
+GRI_ERR_INVALID_PARENT_NAME = _dacsagb.GRI_ERR_INVALID_PARENT_NAME
+GRI_ERR_PARENT_NOT_FOUND = _dacsagb.GRI_ERR_PARENT_NOT_FOUND
+GRI_ERR_NO_TOP_LEVEL_PARENT = _dacsagb.GRI_ERR_NO_TOP_LEVEL_PARENT
+GRI_ERR_PARENT_LOOP = _dacsagb.GRI_ERR_PARENT_LOOP
+GRI_ERR_PARENT_OVERLAP = _dacsagb.GRI_ERR_PARENT_OVERLAP
+GRI_ERR_SUBFILE_OVERLAP = _dacsagb.GRI_ERR_SUBFILE_OVERLAP
+GRI_ERR_INVALID_EXTENT = _dacsagb.GRI_ERR_INVALID_EXTENT
+GRI_ERR_HDRS_NOT_READ = _dacsagb.GRI_ERR_HDRS_NOT_READ
+GRI_ERR_UNKNOWN_FILE_TYPE = _dacsagb.GRI_ERR_UNKNOWN_FILE_TYPE
+GRI_ERR_FILE_NOT_BINARY = _dacsagb.GRI_ERR_FILE_NOT_BINARY
+GRI_ERR_FILE_NOT_ASCII = _dacsagb.GRI_ERR_FILE_NOT_ASCII
+GRI_ERR_NULL_PATH = _dacsagb.GRI_ERR_NULL_PATH
+GRI_ERR_ORIG_DATA_NOT_KEPT = _dacsagb.GRI_ERR_ORIG_DATA_NOT_KEPT
+GRI_ERR_DATA_NOT_READ = _dacsagb.GRI_ERR_DATA_NOT_READ
+GRI_ERR_CANNOT_OPEN_FILE = _dacsagb.GRI_ERR_CANNOT_OPEN_FILE
+GRI_ERR_UNEXPECTED_EOF = _dacsagb.GRI_ERR_UNEXPECTED_EOF
+GRI_ERR_INVALID_LINE = _dacsagb.GRI_ERR_INVALID_LINE
+GRI_FIX_UNPRINTABLE_CHAR = _dacsagb.GRI_FIX_UNPRINTABLE_CHAR
+GRI_FIX_NAME_LOWERCASE = _dacsagb.GRI_FIX_NAME_LOWERCASE
+GRI_FIX_NAME_NOT_ALPHA = _dacsagb.GRI_FIX_NAME_NOT_ALPHA
+GRI_FIX_BLANK_PARENT_NAME = _dacsagb.GRI_FIX_BLANK_PARENT_NAME
+GRI_FIX_BLANK_SUBFILE_NAME = _dacsagb.GRI_FIX_BLANK_SUBFILE_NAME
+GRI_FIX_END_REC_NOT_FOUND = _dacsagb.GRI_FIX_END_REC_NOT_FOUND
+GRI_FIX_END_REC_NAME_NOT_ALPHA = _dacsagb.GRI_FIX_END_REC_NAME_NOT_ALPHA
+GRI_FIX_END_REC_PAD_NOT_ZERO = _dacsagb.GRI_FIX_END_REC_PAD_NOT_ZERO
+
+def gri_errmsg(err_num, msg_buf):
+    return _dacsagb.gri_errmsg(err_num, msg_buf)
+
+def gri_filetype(ntv2file):
+    return _dacsagb.gri_filetype(ntv2file)
+
+def gri_load_file(ntv2file, keep_orig, read_data, extent, prc):
+    return _dacsagb.gri_load_file(ntv2file, keep_orig, read_data, extent, prc)
+
+def gri_delete(hdr):
+    return _dacsagb.gri_delete(hdr)
+GRI_ENDIAN_INP_FILE = _dacsagb.GRI_ENDIAN_INP_FILE
+GRI_ENDIAN_BIG = _dacsagb.GRI_ENDIAN_BIG
+GRI_ENDIAN_LITTLE = _dacsagb.GRI_ENDIAN_LITTLE
+GRI_ENDIAN_NATIVE = _dacsagb.GRI_ENDIAN_NATIVE
+
+def gri_write_file(hdr, path, byte_order):
+    return _dacsagb.gri_write_file(hdr, path, byte_order)
+
+def gri_validate(hdr, fp):
+    return _dacsagb.gri_validate(hdr, fp)
+GRI_DUMP_HDRS_EXT = _dacsagb.GRI_DUMP_HDRS_EXT
+GRI_DUMP_HDRS_INT = _dacsagb.GRI_DUMP_HDRS_INT
+GRI_DUMP_HDRS_BOTH = _dacsagb.GRI_DUMP_HDRS_BOTH
+GRI_DUMP_HDRS_SUMMARY = _dacsagb.GRI_DUMP_HDRS_SUMMARY
+GRI_DUMP_DATA = _dacsagb.GRI_DUMP_DATA
+GRI_DUMP_DATA_ACC = _dacsagb.GRI_DUMP_DATA_ACC
+
+def gri_dump(hdr, fp, mode):
+    return _dacsagb.gri_dump(hdr, fp, mode)
+
+def gri_list(hdr, fp, mode, do_hdr_line):
+    return _dacsagb.gri_list(hdr, fp, mode, do_hdr_line)
+GRI_STATUS_NOTFOUND = _dacsagb.GRI_STATUS_NOTFOUND
+GRI_STATUS_CONTAINED = _dacsagb.GRI_STATUS_CONTAINED
+GRI_STATUS_NORTH = _dacsagb.GRI_STATUS_NORTH
+GRI_STATUS_WEST = _dacsagb.GRI_STATUS_WEST
+GRI_STATUS_NORTH_WEST = _dacsagb.GRI_STATUS_NORTH_WEST
+GRI_STATUS_OUTSIDE_CELL = _dacsagb.GRI_STATUS_OUTSIDE_CELL
+
+def gri_find_rec(hdr, lon, lat, pstatus):
+    return _dacsagb.gri_find_rec(hdr, lon, lat, pstatus)
+
+def gri_forward(hdr, deg_factor, n, coord):
+    return _dacsagb.gri_forward(hdr, deg_factor, n, coord)
+
+def gri_inverse(hdr, deg_factor, n, coord):
+    return _dacsagb.gri_inverse(hdr, deg_factor, n, coord)
+GRI_CVT_FORWARD = _dacsagb.GRI_CVT_FORWARD
+GRI_CVT_INVERSE = _dacsagb.GRI_CVT_INVERSE
+
+def gri_transform(hdr, deg_factor, n, coord, direction):
+    return _dacsagb.gri_transform(hdr, deg_factor, n, coord, direction)
+
+def display_usage(level):
+    return _dacsagb.display_usage(level)
+
+def process_options(argc, argv):
+    return _dacsagb.process_options(argc, argv)
+
+def strip(str):
+    return _dacsagb.strip(str)
+
+def process_lat_lon(hdr, lat, lon):
+    return _dacsagb.process_lat_lon(hdr, lat, lon)
+
+def process_args(hdr, optcnt, argc, argv):
+    return _dacsagb.process_args(hdr, optcnt, argc, argv)
+
+def process_file(hdr, file):
+    return _dacsagb.process_file(hdr, file)
+
+def main_routine(argc, argv):
+    return _dacsagb.main_routine(argc, argv)
+
+def gri_create(grifile, type, prc):
+    return _dacsagb.gri_create(grifile, type, prc)
+
+def gri_get_shift_from_file(hdr, rec, icol, irow, coord_type):
+    return _dacsagb.gri_get_shift_from_file(hdr, rec, icol, irow, coord_type)
 
 def dasag(ang):
     return _dacsagb.dasag(ang)
@@ -92,6 +418,7 @@ def angdir(xs, ys, xt, yt, dz, teta, cd, sd):
 def adjang400(ang):
     return _dacsagb.adjang400(ang)
 awgs84 = _dacsagb.awgs84
+bwgs84 = _dacsagb.bwgs84
 e2wgs84 = _dacsagb.e2wgs84
 ahi = _dacsagb.ahi
 bhi = _dacsagb.bhi
@@ -189,6 +516,8 @@ class Geodesia(object):
     EstFE = property(_dacsagb.Geodesia_EstFE_get, _dacsagb.Geodesia_EstFE_set)
     NordFO = property(_dacsagb.Geodesia_NordFO_get, _dacsagb.Geodesia_NordFO_set)
     EstFO = property(_dacsagb.Geodesia_EstFO_get, _dacsagb.Geodesia_EstFO_set)
+    NordUTM = property(_dacsagb.Geodesia_NordUTM_get, _dacsagb.Geodesia_NordUTM_set)
+    EstUTM = property(_dacsagb.Geodesia_EstUTM_get, _dacsagb.Geodesia_EstUTM_set)
     crid = property(_dacsagb.Geodesia_crid_get, _dacsagb.Geodesia_crid_set)
 
     def lfi(self):
@@ -196,6 +525,9 @@ class Geodesia(object):
 
     def NEgb(self, f, l, MM=True):
         return _dacsagb.Geodesia_NEgb(self, f, l, MM)
+
+    def NEutm(self, f, l, fuso):
+        return _dacsagb.Geodesia_NEutm(self, f, l, fuso)
 
     def FiLagb(self, N, E, fi, la):
         return _dacsagb.Geodesia_FiLagb(self, N, E, fi, la)
@@ -224,6 +556,7 @@ class Geodesia(object):
 
 # Register Geodesia in _dacsagb:
 _dacsagb.Geodesia_swigregister(Geodesia)
+cvar = _dacsagb.cvar
 
 dapianeapiane = _dacsagb.dapianeapiane
 dapianeageogr = _dacsagb.dapianeageogr
@@ -232,6 +565,37 @@ dageograagegr = _dacsagb.dageograagegr
 daCSafila = _dacsagb.daCSafila
 ddd_mm_ss = _dacsagb.ddd_mm_ss
 ddd_dddd = _dacsagb.ddd_dddd
+class _POINT(object):
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
+    __repr__ = _swig_repr
+    estcs = property(_dacsagb._POINT_estcs_get, _dacsagb._POINT_estcs_set)
+    nordcs = property(_dacsagb._POINT_nordcs_get, _dacsagb._POINT_nordcs_set)
+    locs = property(_dacsagb._POINT_locs_get, _dacsagb._POINT_locs_set)
+    fics = property(_dacsagb._POINT_fics_get, _dacsagb._POINT_fics_set)
+    logb = property(_dacsagb._POINT_logb_get, _dacsagb._POINT_logb_set)
+    figb = property(_dacsagb._POINT_figb_get, _dacsagb._POINT_figb_set)
+    estgbFE = property(_dacsagb._POINT_estgbFE_get, _dacsagb._POINT_estgbFE_set)
+    nordgbFE = property(_dacsagb._POINT_nordgbFE_get, _dacsagb._POINT_nordgbFE_set)
+    estgbFO = property(_dacsagb._POINT_estgbFO_get, _dacsagb._POINT_estgbFO_set)
+    nordgbFO = property(_dacsagb._POINT_nordgbFO_get, _dacsagb._POINT_nordgbFO_set)
+    lo2000 = property(_dacsagb._POINT_lo2000_get, _dacsagb._POINT_lo2000_set)
+    fi2000 = property(_dacsagb._POINT_fi2000_get, _dacsagb._POINT_fi2000_set)
+    estUTM = property(_dacsagb._POINT_estUTM_get, _dacsagb._POINT_estUTM_set)
+    nordUTM = property(_dacsagb._POINT_nordUTM_get, _dacsagb._POINT_nordUTM_set)
+    fuso = property(_dacsagb._POINT_fuso_get, _dacsagb._POINT_fuso_set)
+
+    def __init__(self):
+        _dacsagb._POINT_swiginit(self, _dacsagb.new__POINT())
+    __swig_destroy__ = _dacsagb.delete__POINT
+
+# Register _POINT in _dacsagb:
+_dacsagb._POINT_swigregister(_POINT)
+
+o_u_s = _dacsagb.o_u_s
+o_u_r = _dacsagb.o_u_r
+o_u_c = _dacsagb.o_u_c
+o_u_d = _dacsagb.o_u_d
+o_u_p = _dacsagb.o_u_p
 class dacsagb(object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc="The membership flag")
     __repr__ = _swig_repr
@@ -246,10 +610,23 @@ class dacsagb(object):
     fiGB = property(_dacsagb.dacsagb_fiGB_get, _dacsagb.dacsagb_fiGB_set)
     laGB = property(_dacsagb.dacsagb_laGB_get, _dacsagb.dacsagb_laGB_set)
     messaggio = property(_dacsagb.dacsagb_messaggio_get, _dacsagb.dacsagb_messaggio_set)
+    nomefilecxf = property(_dacsagb.dacsagb_nomefilecxf_get, _dacsagb.dacsagb_nomefilecxf_set)
+    nomefilelog = property(_dacsagb.dacsagb_nomefilelog_get, _dacsagb.dacsagb_nomefilelog_set)
+    nomefileout = property(_dacsagb.dacsagb_nomefileout_get, _dacsagb.dacsagb_nomefileout_set)
+    cartellageo = property(_dacsagb.dacsagb_cartellageo_get, _dacsagb.dacsagb_cartellageo_set)
+    file_gsb = property(_dacsagb.dacsagb_file_gsb_get, _dacsagb.dacsagb_file_gsb_set)
+    ses = property(_dacsagb.dacsagb_ses_get, _dacsagb.dacsagb_ses_set)
+    rad = property(_dacsagb.dacsagb_rad_get, _dacsagb.dacsagb_rad_set)
+    deg = property(_dacsagb.dacsagb_deg_get, _dacsagb.dacsagb_deg_set)
+    cent = property(_dacsagb.dacsagb_cent_get, _dacsagb.dacsagb_cent_set)
+    piane = property(_dacsagb.dacsagb_piane_get, _dacsagb.dacsagb_piane_set)
     op = property(_dacsagb.dacsagb_op_get, _dacsagb.dacsagb_op_set)
 
     def __init__(self, *args):
         _dacsagb.dacsagb_swiginit(self, _dacsagb.new_dacsagb(*args))
+
+    def calcolaCXF(self, filemp, fileout, filelog, cartellagbs, fmt):
+        return _dacsagb.dacsagb_calcolaCXF(self, filemp, fileout, filelog, cartellagbs, fmt)
     __swig_destroy__ = _dacsagb.delete_dacsagb
 
 # Register dacsagb in _dacsagb:
@@ -261,11 +638,8 @@ FUSO_EST = _dacsagb.FUSO_EST
 def DaPianeCSaFiLa(est, nord, la, fi, ms):
     return _dacsagb.DaPianeCSaFiLa(est, nord, la, fi, ms)
 
-def calcolo(estCS, nordCS, laCS, fiCS, estGB, nordGB, laGB, fiGB):
-    return _dacsagb.calcolo(estCS, nordCS, laCS, fiCS, estGB, nordGB, laGB, fiGB)
-
-def est_nordCS_est_nordGB(estCS, nordCS, fuso_richiesto, estGB, nordGB):
-    return _dacsagb.est_nordCS_est_nordGB(estCS, nordCS, fuso_richiesto, estGB, nordGB)
+def calcolo(*args):
+    return _dacsagb.calcolo(*args)
 
 def la_fiCS_la_fiGB(laCS, fiCS, u, laGB, fiGB):
     return _dacsagb.la_fiCS_la_fiGB(laCS, fiCS, u, laGB, fiGB)
@@ -281,5 +655,11 @@ def est_nordCS_la_fiCS(estCS, nordCS, laCS, fiCS):
 
 def est_nordGB_la_fiGB(estGB, nordGB, laGB, fiGB):
     return _dacsagb.est_nordGB_la_fiGB(estGB, nordGB, laGB, fiGB)
+
+def removfirstblanck(a):
+    return _dacsagb.removfirstblanck(a)
+
+def calcolaunpunto(hh, nordcs, estcs, nordutm, estutm, fuso):
+    return _dacsagb.calcolaunpunto(hh, nordcs, estcs, nordutm, estutm, fuso)
 
 

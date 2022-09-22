@@ -2,7 +2,7 @@ from distutils.core import setup, Extension
 
 
 dacsagb_module = Extension('_dacsagb',
-    sources=['dacsagb_wrap.cxx', 'dacsagb.cpp'],
+    sources=['dacsagb_wrap.cxx', 'src/dacsagb.cpp', 'src/interpola.cpp'],
 )
 setup (name = 'dacsagb',
     version = '0.1',
