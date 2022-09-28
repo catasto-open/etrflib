@@ -5,6 +5,7 @@ using namespace std;
 
 
 #include <limits.h>
+#include <cerrno>
 //ifstream impfilecxf;
 ofstream outfile;
 ofstream logfile;
@@ -1237,10 +1238,15 @@ dacsagb::dacsagb(double par1, double par2, int par3)
 
 }
 
-bool dacsagb::calcolaCXF(std::string filemp, std::string fileout, std::string filelog, std::string cartellagbs,int fmt)
+bool dacsagb::calcolaCXF(char* filemp, char* fileout, char* filelog, char* cartellagbs, int fmt)
+{
+  return calcolaCXFC(filemp, fileout, filelog, cartellagbs,fmt);
+}
+
+bool dacsagb::calcolaCXFC(std::string filemp, std::string fileout, std::string filelog, std::string cartellagbs,int fmt)
 {
 
- 
+
   string nomemappa;
   GRI_HDR* h;
   FILE *impfilecxf;
@@ -1277,7 +1283,9 @@ nomefilecxf = filemp; nomefileout = fileout; nomefilelog = filelog; cartellageo 
   
   if(-1!=stat(nomefilelog.c_str(), &buff_stat))
   {
-    remove(nomefilelog.c_str());
+
+      perror("stat");
+      remove(nomefilelog.c_str());
   }
   /*
   else
@@ -1319,11 +1327,32 @@ nomefilecxf = filemp; nomefileout = fileout; nomefilelog = filelog; cartellageo 
 
   }
 */
- 
+  error_t err;
   logfile.open(nomefilelog, std::ios::out);
   if (logfile.fail())
   {
     cout << "fallita apertura file" << nomefilelog;
+    int result = stat(nomefilelog.c_str(), &buff_stat);
+
+    // Check if statistics are valid:
+    if (result != 0)
+    {
+      perror("Problem getting information");
+      switch (errno)
+      {
+      case ENOENT:
+        printf("File %s not found.\n", nomefilelog);
+        break;
+      case EINVAL:
+        printf("Invalid parameter to stat.\n");
+        break;
+      default:
+        /* Should never be reached. */
+        printf("Unexpected error in stat.\n");
+      }
+    }
+
+
     return false;
   }
   if (-1 == stat(nomefilecxf.c_str(), &buff_stat))
@@ -1339,25 +1368,34 @@ nomefilecxf = filemp; nomefileout = fileout; nomefilelog = filelog; cartellageo 
     logfile << "stop" << endl;
     return -1; 
   }
-  if (-1 == stat(nomefileout.c_str(), &buff_stat))
+  if (-1 != stat(nomefileout.c_str(), &buff_stat))
   {
     if ((buff_stat.st_mode & S_IFMT) == S_IFDIR)
-    {
-      logfile << "la cartella per i risultati " << nomefileout << " non esiste" << endl;
-      logfile << "stop" << endl;
-      return -1;
-    }
-    else
     {
       string elenco = nomefileout;
       elenco += "/*.*";
       remove(elenco.c_str());
       logfile << "svuotata cartella " << nomefileout << endl;
     }
-    logfile << "stop" << endl;
-    return -1;
+    else
+    {
+      remove(nomefileout.c_str());
+      logfile << "rimosso il file dei risultati precedente" << nomefileout << endl;
+    }
   }
- 
+  else
+  {
+    if (errno == ENOENT)
+    {
+      if (nomefileout.find(".ctf") == string::npos)
+      {
+        logfile << "la cartella per i risultati " << nomefileout << " non esiste" << endl;
+        logfile << "stop" << endl;
+        return -1;
+      }
+    }
+  }
+   
   if (-1 == stat(cartellageo.c_str(), &buff_stat))
   {
    
@@ -1371,13 +1409,31 @@ nomefilecxf = filemp; nomefileout = fileout; nomefilelog = filelog; cartellageo 
     logfile << "Cartella con i gligliati GeoServer " << cartellageo.c_str() << endl;
   }
   else
-    logfile << "Fil con i gligliati GeoServer " << cartellageo.c_str() << endl;
-  if (-1 == stat(nomefilecxf.c_str(), &buff_stat))
+    logfile << "File con i gligliati GeoServer " << cartellageo.c_str() << endl;
+  if (-1 != stat(nomefilecxf.c_str(), &buff_stat))
   {
     if ((buff_stat.st_mode & S_IFMT) == S_IFDIR)
       logfile << "cartella con file CXF " << nomefilecxf << endl;
     else
       logfile << "file CXF " << nomefilecxf << endl;
+  }
+  else
+  {
+    if (errno == ENOENT)
+    {
+      if (nomefilecxf.find(".cxf") != string::npos)
+      {
+        logfile << "la cartella per i file cxf " << nomefilecxf << " non esiste" << endl;
+        logfile << "stop" << endl;
+        return -1;
+      }
+      else
+      {
+        logfile << "il file cxf " << nomefilecxf << " non esiste" << endl;
+        logfile << "stop" << endl;
+        return -1;
+      }
+    }
   }
  
   logfile << " File con le coordinate trasformate" << nomefileout.c_str() << endl;
@@ -1459,7 +1515,7 @@ nomefilecxf = filemp; nomefileout = fileout; nomefilelog = filelog; cartellageo 
   int fuso;
   for (auto p = linp.begin(); p < linp.end(); p++)
   {
-    /* vediamo se è un valore coordinate*/
+    /* vediamo se ï¿½ un valore coordinate*/
     if ((*p).find("MAPPA") != string::npos || (*p).find("QUADRO") != string::npos)
     {
       outfile << (*p).c_str() << endl; //etichetta mappa

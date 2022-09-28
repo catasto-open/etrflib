@@ -215,7 +215,9 @@ class dacsagb
 public:
   dacsagb(double par1, double par2, int par3);
 
-  bool calcolaCXF(string filemp, string fileout, string filelog,string cartellagbs, int fmt);
+  bool calcolaCXFC(string filemp, string fileout, string filelog,string cartellagbs, int fmt);
+  bool calcolaCXF(char* filemp, char* fileout, char* filelog, char* cartellagbs, int fmt);
+  
 
 };
 
@@ -225,7 +227,7 @@ public:
 bool DaPianeCSaFiLa(double est, double nord, double& la, double& fi, string & ms);
 void calcolo(double &estCS, double& nordCS, double& laCS, double& fiCS,double& estGBFE, double& nordGBFE, double& estGBFO, double& nordGBFO, double& laGB, double& fiGB);
 void calcolo(_POINT &p ,bool utm=false);
-// int  est_nordCS_est_nordGB(double estCS, double nordCS, int fuso_richiesto,double& estGB, double& nordGB);
+//int  est_nordCS_est_nordGB(double estCS, double nordCS, int fuso_richiesto,double& estGB, double& nordGB);
 int  la_fiCS_la_fiGB(double laCS, double fiCS, int u, double& laGB, double& fiGB);
 int  la_fiCS_est_nordCS(double laCS, double fiCS, int u, double& estCS, double& nordCS);
 int  la_fiGB_est_nordGB(double laGB, double fiGB, int u, double& estGB, double& nordGB);

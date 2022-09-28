@@ -625,6 +625,9 @@ class dacsagb(object):
     def __init__(self, *args):
         _dacsagb.dacsagb_swiginit(self, _dacsagb.new_dacsagb(*args))
 
+    def calcolaCXFC(self, filemp, fileout, filelog, cartellagbs, fmt):
+        return _dacsagb.dacsagb_calcolaCXFC(self, filemp, fileout, filelog, cartellagbs, fmt)
+
     def calcolaCXF(self, filemp, fileout, filelog, cartellagbs, fmt):
         return _dacsagb.dacsagb_calcolaCXF(self, filemp, fileout, filelog, cartellagbs, fmt)
     __swig_destroy__ = _dacsagb.delete_dacsagb

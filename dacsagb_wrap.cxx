@@ -17194,7 +17194,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_dacsagb_calcolaCXF(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_dacsagb_calcolaCXFC(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   dacsagb *arg1 = (dacsagb *) 0 ;
   string arg2 ;
@@ -17217,19 +17217,19 @@ SWIGINTERN PyObject *_wrap_dacsagb_calcolaCXF(PyObject *SWIGUNUSEDPARM(self), Py
   PyObject *swig_obj[6] ;
   bool result;
   
-  if (!SWIG_Python_UnpackTuple(args, "dacsagb_calcolaCXF", 6, 6, swig_obj)) SWIG_fail;
+  if (!SWIG_Python_UnpackTuple(args, "dacsagb_calcolaCXFC", 6, 6, swig_obj)) SWIG_fail;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_dacsagb, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "dacsagb_calcolaCXF" "', argument " "1"" of type '" "dacsagb *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "dacsagb_calcolaCXFC" "', argument " "1"" of type '" "dacsagb *""'"); 
   }
   arg1 = reinterpret_cast< dacsagb * >(argp1);
   {
     res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_string,  0  | 0);
     if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "dacsagb_calcolaCXF" "', argument " "2"" of type '" "string""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "dacsagb_calcolaCXFC" "', argument " "2"" of type '" "string""'"); 
     }  
     if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "dacsagb_calcolaCXF" "', argument " "2"" of type '" "string""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "dacsagb_calcolaCXFC" "', argument " "2"" of type '" "string""'");
     } else {
       string * temp = reinterpret_cast< string * >(argp2);
       arg2 = *temp;
@@ -17239,10 +17239,10 @@ SWIGINTERN PyObject *_wrap_dacsagb_calcolaCXF(PyObject *SWIGUNUSEDPARM(self), Py
   {
     res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_string,  0  | 0);
     if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "dacsagb_calcolaCXF" "', argument " "3"" of type '" "string""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "dacsagb_calcolaCXFC" "', argument " "3"" of type '" "string""'"); 
     }  
     if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "dacsagb_calcolaCXF" "', argument " "3"" of type '" "string""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "dacsagb_calcolaCXFC" "', argument " "3"" of type '" "string""'");
     } else {
       string * temp = reinterpret_cast< string * >(argp3);
       arg3 = *temp;
@@ -17252,10 +17252,10 @@ SWIGINTERN PyObject *_wrap_dacsagb_calcolaCXF(PyObject *SWIGUNUSEDPARM(self), Py
   {
     res4 = SWIG_ConvertPtr(swig_obj[3], &argp4, SWIGTYPE_p_string,  0  | 0);
     if (!SWIG_IsOK(res4)) {
-      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "dacsagb_calcolaCXF" "', argument " "4"" of type '" "string""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "dacsagb_calcolaCXFC" "', argument " "4"" of type '" "string""'"); 
     }  
     if (!argp4) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "dacsagb_calcolaCXF" "', argument " "4"" of type '" "string""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "dacsagb_calcolaCXFC" "', argument " "4"" of type '" "string""'");
     } else {
       string * temp = reinterpret_cast< string * >(argp4);
       arg4 = *temp;
@@ -17265,10 +17265,10 @@ SWIGINTERN PyObject *_wrap_dacsagb_calcolaCXF(PyObject *SWIGUNUSEDPARM(self), Py
   {
     res5 = SWIG_ConvertPtr(swig_obj[4], &argp5, SWIGTYPE_p_string,  0  | 0);
     if (!SWIG_IsOK(res5)) {
-      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "dacsagb_calcolaCXF" "', argument " "5"" of type '" "string""'"); 
+      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "dacsagb_calcolaCXFC" "', argument " "5"" of type '" "string""'"); 
     }  
     if (!argp5) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "dacsagb_calcolaCXF" "', argument " "5"" of type '" "string""'");
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "dacsagb_calcolaCXFC" "', argument " "5"" of type '" "string""'");
     } else {
       string * temp = reinterpret_cast< string * >(argp5);
       arg5 = *temp;
@@ -17277,13 +17277,87 @@ SWIGINTERN PyObject *_wrap_dacsagb_calcolaCXF(PyObject *SWIGUNUSEDPARM(self), Py
   }
   ecode6 = SWIG_AsVal_int(swig_obj[5], &val6);
   if (!SWIG_IsOK(ecode6)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "dacsagb_calcolaCXFC" "', argument " "6"" of type '" "int""'");
+  } 
+  arg6 = static_cast< int >(val6);
+  result = (bool)(arg1)->calcolaCXFC(arg2,arg3,arg4,arg5,arg6);
+  resultobj = SWIG_From_bool(static_cast< bool >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_dacsagb_calcolaCXF(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  dacsagb *arg1 = (dacsagb *) 0 ;
+  char *arg2 = (char *) 0 ;
+  char *arg3 = (char *) 0 ;
+  char *arg4 = (char *) 0 ;
+  char *arg5 = (char *) 0 ;
+  int arg6 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int res2 ;
+  char *buf2 = 0 ;
+  int alloc2 = 0 ;
+  int res3 ;
+  char *buf3 = 0 ;
+  int alloc3 = 0 ;
+  int res4 ;
+  char *buf4 = 0 ;
+  int alloc4 = 0 ;
+  int res5 ;
+  char *buf5 = 0 ;
+  int alloc5 = 0 ;
+  int val6 ;
+  int ecode6 = 0 ;
+  PyObject *swig_obj[6] ;
+  bool result;
+  
+  if (!SWIG_Python_UnpackTuple(args, "dacsagb_calcolaCXF", 6, 6, swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_dacsagb, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "dacsagb_calcolaCXF" "', argument " "1"" of type '" "dacsagb *""'"); 
+  }
+  arg1 = reinterpret_cast< dacsagb * >(argp1);
+  res2 = SWIG_AsCharPtrAndSize(swig_obj[1], &buf2, NULL, &alloc2);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "dacsagb_calcolaCXF" "', argument " "2"" of type '" "char *""'");
+  }
+  arg2 = reinterpret_cast< char * >(buf2);
+  res3 = SWIG_AsCharPtrAndSize(swig_obj[2], &buf3, NULL, &alloc3);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "dacsagb_calcolaCXF" "', argument " "3"" of type '" "char *""'");
+  }
+  arg3 = reinterpret_cast< char * >(buf3);
+  res4 = SWIG_AsCharPtrAndSize(swig_obj[3], &buf4, NULL, &alloc4);
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "dacsagb_calcolaCXF" "', argument " "4"" of type '" "char *""'");
+  }
+  arg4 = reinterpret_cast< char * >(buf4);
+  res5 = SWIG_AsCharPtrAndSize(swig_obj[4], &buf5, NULL, &alloc5);
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "dacsagb_calcolaCXF" "', argument " "5"" of type '" "char *""'");
+  }
+  arg5 = reinterpret_cast< char * >(buf5);
+  ecode6 = SWIG_AsVal_int(swig_obj[5], &val6);
+  if (!SWIG_IsOK(ecode6)) {
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "dacsagb_calcolaCXF" "', argument " "6"" of type '" "int""'");
   } 
   arg6 = static_cast< int >(val6);
   result = (bool)(arg1)->calcolaCXF(arg2,arg3,arg4,arg5,arg6);
   resultobj = SWIG_From_bool(static_cast< bool >(result));
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
+  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
+  if (alloc5 == SWIG_NEWOBJ) delete[] buf5;
   return resultobj;
 fail:
+  if (alloc2 == SWIG_NEWOBJ) delete[] buf2;
+  if (alloc3 == SWIG_NEWOBJ) delete[] buf3;
+  if (alloc4 == SWIG_NEWOBJ) delete[] buf4;
+  if (alloc5 == SWIG_NEWOBJ) delete[] buf5;
   return NULL;
 }
 
@@ -18506,6 +18580,7 @@ static PyMethodDef SwigMethods[] = {
 	 { "dacsagb_op_set", _wrap_dacsagb_op_set, METH_VARARGS, NULL},
 	 { "dacsagb_op_get", _wrap_dacsagb_op_get, METH_O, NULL},
 	 { "new_dacsagb", _wrap_new_dacsagb, METH_VARARGS, NULL},
+	 { "dacsagb_calcolaCXFC", _wrap_dacsagb_calcolaCXFC, METH_VARARGS, NULL},
 	 { "dacsagb_calcolaCXF", _wrap_dacsagb_calcolaCXF, METH_VARARGS, NULL},
 	 { "delete_dacsagb", _wrap_delete_dacsagb, METH_O, NULL},
 	 { "dacsagb_swigregister", dacsagb_swigregister, METH_O, NULL},
