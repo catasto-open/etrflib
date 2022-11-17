@@ -62,6 +62,11 @@ g++ -shared dacsagb_wrap.o dacsagb.o interpola.o $(python3-config --cflags --ldf
 
 ##### Run the module in python
 
+###### Quick interactive mode for development
+
+Supposing there is the input sample file `H501D076700.cxf` and the transformation configuration (a `.gsb` file) under the same directory
+`/tmp/data`, the tool produces the outfile `H501D076700.ctf` there.
+
 ```bash
 python
 ```
@@ -70,4 +75,17 @@ python
 >>> import dacsagb
 >>> p = dacsagb.dacsagb()
 >>> p.calcolaCXF("/tmp/data/H501D076700.cxf", "/tmp/data/H501D076700.ctf", "/tmp/data/H501D076700.log", "/tmp/data",4)
+```
+
+###### Command line
+
+```bash
+docker run -it -v "$(pwd):/tmp" --entrypoint "/bin/bash" geobeyond/etrflib
+python cxf2ctf.py /tmp/data/H501D076700.cxf
+```
+
+or directly from your local console through a Docker command:
+
+```bash
+docker run -it -v "$(pwd):/tmp" --entrypoint "/bin/bash" geobeyond/etrflib -c "python cxf2ctf.py /tmp/data/H501D076700.cxf"
 ```

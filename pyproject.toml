@@ -9,6 +9,7 @@ python = "^3.8"
 cffi = "^1.15.0"
 ipython = "^8.3.0"
 pydffi = "^0.9.3"
+typer = "^0.6.1"
 
 [tool.poetry.dev-dependencies]
 
