@@ -15,6 +15,7 @@ COPY ./pyproject.toml ./poetry.lock* /tmp/
 
 # install dependencies
 WORKDIR /tmp/
-RUN poetry install --no-root --only main
+RUN poetry install --no-root --only main \
+    && poetry install
 
 CMD [ "/bin/bash" ]

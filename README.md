@@ -74,7 +74,7 @@ python
 ```python
 >>> import dacsagb
 >>> p = dacsagb.dacsagb()
->>> p.calcolaCXF("/tmp/data/H501D076700.cxf", "/tmp/data/H501D076700.ctf", "/tmp/data/H501D076700.log", "/tmp/data",4)
+>>> p.calcolaCXF("/tmp/data/H501D076700.cxf", "/tmp/data/H501D076700.ctf", "/tmp/data/H501D076700.log", "/tmp/data", 4)
 ```
 
 ###### Command line

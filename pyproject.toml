@@ -4,12 +4,19 @@ version = "0.1.0"
 description = ""
 authors = ["Francesco Bartoli <francesco.bartoli@geobeyond.it>"]
 
+[tool.poetry.scripts]
+etrflib = "etrflib.main:app"
+
 [tool.poetry.dependencies]
 python = "^3.8"
 cffi = "^1.15.0"
 ipython = "^8.3.0"
 pydffi = "^0.9.3"
-typer = "^0.6.1"
+typer = {extras = ["all"], version = "^0.7.0"}
+pydantic = "^1.10.2"
+miniopy-async = "^1.11"
+aiofiles = "^22.1.0"
+pyfiglet = "^0.8.post1"
 
 [tool.poetry.dev-dependencies]
 
