@@ -1,7 +1,9 @@
 # file: root/__init__.py
 from functools import wraps
 from asyncio import run
+import asyncio
 import typer
+
 
 # This is a standard decorator that takes arguments
 # the same way app.command does but with 
@@ -17,7 +19,7 @@ def async_command(app, *args, **kwargs):
         # argument type hints
         @wraps(async_func)
         def sync_func(*_args, **_kwargs):
-            return run(async_func(*_args, **_kwargs))
+            return asyncio.get_event_loop().run_until_complete((async_func(*_args, **_kwargs)))
 
         # Now use app.command as normal to register the
         # synchronous function

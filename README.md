@@ -60,9 +60,11 @@ gcc -fPIC -std=c++17 -c src/*.cpp -Isrc dacsagb_wrap.cxx -I/usr/include/python3.
 g++ -shared dacsagb_wrap.o dacsagb.o interpola.o $(python3-config --cflags --ldflags) -o _dacsagb.so
 ```
 
-##### Run the module in python
+### How to run
 
-###### Quick interactive mode for development
+#### Run the module in python
+
+##### Quick interactive mode for development
 
 Supposing there is the input sample file `H501D076700.cxf` and the transformation configuration (a `.gsb` file) under the same directory
 `/tmp/data`, the tool produces the outfile `H501D076700.ctf` there.
@@ -77,7 +79,9 @@ python
 >>> p.calcolaCXF("/tmp/data/H501D076700.cxf", "/tmp/data/H501D076700.ctf", "/tmp/data/H501D076700.log", "/tmp/data", 4)
 ```
 
-###### Command line
+##### Command line
+
+###### Local transformation
 
 ```bash
 docker run -it -v "$(pwd):/tmp" --entrypoint "/bin/bash" geobeyond/etrflib
@@ -88,4 +92,23 @@ or directly from your local console through a Docker command:
 
 ```bash
 docker run -it -v "$(pwd):/tmp" --entrypoint "/bin/bash" geobeyond/etrflib -c "python cxf2ctf.py /tmp/data/H501D076700.cxf"
+```
+
+###### Remote transformation
+
+For development:
+
+```bash
+docker run -it -v "$(pwd):/tmp" --entrypoint /bin/bash --network prefect-network geobeyond/etrflib:0.0.1.dev
+# run the CLI
+etrflib remote-convert --bucket-path http://host.docker.internal:9000/sister --object-path 20112022 --filename H501B072500.cxf --destination-path H501B072500 --key e5NDexDVLlhTIvCd --secret xjnSuoApCzXQP4XLVFecULO4KoqOAduv
+```
+
+For production:
+
+```bash
+# build the image
+docker build --no-cache -t geobeyond/etrflib -f Dockerfile.run .
+# run the container
+docker run -it --entrypoint "/bin/bash" --network prefect-network geobeyond/etrflib -c "etrflib remote-convert --bucket-path http://nginx:9000/sister --object-path 20112022 --filename H501B072500.cxf --destination-path H501B072500 --key e5NDexDVLlhTIvCd --secret xjnSuoApCzXQP4XLVFecULO4KoqOAduv"
 ```
