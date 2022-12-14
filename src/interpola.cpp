@@ -5003,7 +5003,7 @@ void process_lat_lon(
 /*------------------------------------------------------------------------
  * process all arguments
  */
-int process_args(
+  int process_args(
   GRI_HDR* hdr,
   int          optcnt,
   int          argc,

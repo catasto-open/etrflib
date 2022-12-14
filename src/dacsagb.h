@@ -238,7 +238,7 @@ int  est_nordGB_la_fiGB(double estGB, double nordGB, double& laGB, double& fiGB)
 
 string removfirstblanck(string a);
 
-bool calcolaunpunto(GRI_HDR* hh, double nordcs, double estcs, double& nordutm, double& estutm, int& fuso);
-
+bool calcolaunpunto(GRI_HDR* hh, double nordcs, double estcs, double& estutm, double& nordutm, int& fuso);
+int  calcolaunpunto_c(double estCS, double nordCS, int fuso_richiesto, double& estGB, double& nordGB);
 extern string nomefilegriglia;
 

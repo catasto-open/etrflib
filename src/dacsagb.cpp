@@ -9,6 +9,7 @@ using namespace std;
 //ifstream impfilecxf;
 ofstream outfile;
 ofstream logfile;
+ofstream outgb;
 
 string nomefilegriglia="";
 double PI = (double)3.14159265358979323846264338327950; /* pigrego */
@@ -1246,10 +1247,11 @@ bool dacsagb::calcolaCXF(char* filemp, char* fileout, char* filelog, char* carte
 bool dacsagb::calcolaCXFC(std::string filemp, std::string fileout, std::string filelog, std::string cartellagbs,int fmt)
 {
 
-
+ 
   string nomemappa;
   GRI_HDR* h;
   FILE *impfilecxf;
+  string nomefilegb;
 
 
   switch(fmt)
@@ -1355,6 +1357,38 @@ nomefilecxf = filemp; nomefileout = fileout; nomefilelog = filelog; cartellageo 
 
     return false;
   }
+  int pospunto = nomefileout.find('.');
+  nomefilegb = nomefileout.substr(0,pospunto);
+  nomefilegb += ".gbe";
+  outgb.open(nomefilegb, std::ios::out);
+  if (outgb.fail())
+  {
+    cout << "fallita apertura file" << nomefilegb;
+    int result = stat(nomefilegb.c_str(), &buff_stat);
+
+    // Check if statistics are valid:
+    if (result != 0)
+    {
+      perror("Problem getting information");
+      switch (errno)
+      {
+      case ENOENT:
+        printf("File %s not found.\n", nomefilelog);
+        break;
+      case EINVAL:
+        printf("Invalid parameter to stat.\n");
+        break;
+      default:
+        /* Should never be reached. */
+        printf("Unexpected error in stat.\n");
+      }
+    }
+    return false;
+  }
+
+
+
+
   if (-1 == stat(nomefilecxf.c_str(), &buff_stat))
   {
     if((buff_stat.st_mode& S_IFMT)== S_IFDIR)
@@ -1522,6 +1556,7 @@ nomefilecxf = filemp; nomefileout = fileout; nomefilelog = filelog; cartellageo 
   }
   fclose(impfilecxf);
   double estUTM, nordUTM;
+  double estGB, nordGB;
   int fuso;
   for (auto p = linp.begin(); p < linp.end(); p++)
   {
@@ -1529,44 +1564,68 @@ nomefilecxf = filemp; nomefileout = fileout; nomefilelog = filelog; cartellageo 
     if ((*p).find("MAPPA") != string::npos || (*p).find("QUADRO") != string::npos)
     {
       outfile << (*p).c_str() << '\r'<<endl; //etichetta mappa
+      outgb << (*p).c_str() << '\r' << endl; //etichetta mappa
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//nome mappa
+      outgb << (*p).c_str() << '\r' << endl; //etichetta mappa
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//scala
+      outgb << (*p).c_str() << '\r' << endl; //etichetta mappa
     }
     if ((*p).find("BORDO") != string::npos)
     {
       outfile << (*p).c_str() <<'\r'<<endl; //Bordo
+      outgb << (*p).c_str() << '\r' << endl; //Bordo
       p++;
       string etichetta = *p;
       outfile << (*p).c_str() <<'\r'<<endl;//dentificativo bordo
+      outgb << (*p).c_str() << '\r' << endl;//dentificativo bordo
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//scala
+      outgb << (*p).c_str() << '\r' << endl;//scala
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//angolo
+      outgb << (*p).c_str() << '\r' << endl;//scala
       p++;
       double  POSIZIONEX = atof((*p).c_str());
       p++;
       double  POSIZIONEY = atof((*p).c_str());
-      calcolaunpunto(h, POSIZIONEX, POSIZIONEY, nordUTM, estUTM, fuso);
+      calcolaunpunto_c(POSIZIONEX, POSIZIONEY, FUSO_EST, estGB, nordGB);
+      calcolaunpunto(h, POSIZIONEX, POSIZIONEY, estUTM, nordUTM, fuso);
       outfile.width(12);outfile.precision(3);
       outfile << fixed<< right<<estUTM <<'\r'<<endl;
       outfile.width(12); outfile.precision(3);
       outfile << fixed<< right<<nordUTM <<'\r'<<endl;
+
+      outgb.width(12); outgb.precision(3);
+      outgb << fixed << right << estGB << '\r' << endl;
+      outgb.width(12); outgb.precision(3);
+      outgb << fixed << right << nordGB << '\r' << endl;
+
       p++;
       double  POSIZIONEPUNTOINTERNOX = atof((*p).c_str());
       p++;
       double  POSIZIONEPUNTOINTERNOY = atof((*p).c_str());
-      calcolaunpunto(h, POSIZIONEPUNTOINTERNOX, POSIZIONEPUNTOINTERNOX, nordUTM, estUTM, fuso);
+      calcolaunpunto(h, POSIZIONEPUNTOINTERNOX, POSIZIONEPUNTOINTERNOY, nordUTM, estUTM, fuso);
+      calcolaunpunto_c(POSIZIONEPUNTOINTERNOX, POSIZIONEPUNTOINTERNOY, FUSO_EST, estGB, nordGB);
       outfile.width(12); outfile.precision(3);
       outfile << fixed << right << estUTM <<'\r'<<endl;
       outfile.width(12); outfile.precision(3);
       outfile << fixed << right << nordUTM <<'\r'<<endl;
+
+      outgb.width(12); outgb.precision(3);
+      outgb << fixed << right << estGB << '\r' << endl;
+      outgb.width(12); outgb.precision(3);
+      outgb << fixed << right << nordGB << '\r' << endl;
+
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//numero isole
+      outgb << (*p).c_str() << '\r' << endl;//numero isole
+
       int num_isole = atoi((*p).c_str());
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//numero vertici
+      outgb << (*p).c_str() << '\r' << endl;//numero vertici
       int num_vertici = atoi((*p).c_str());
       if (num_isole > 0)
       {
@@ -1575,6 +1634,7 @@ nomefilecxf = filemp; nomefileout = fileout; nomefilelog = filelog; cartellageo 
           p++;
           int num_vertici_isole = atoi((*p).c_str());
           outfile << (*p).c_str() <<'\r'<<endl;//numero vertici k-ma isola
+          outgb << (*p).c_str() << '\r' << endl;//numero vertici k-ma isola
         }
       }
       for (int i = 0; i < num_vertici; i++)
@@ -1583,86 +1643,133 @@ nomefilecxf = filemp; nomefileout = fileout; nomefilelog = filelog; cartellageo 
         POSIZIONEX = atof((*p).c_str());
         p++;
         POSIZIONEY = atof((*p).c_str());
-        calcolaunpunto(h, POSIZIONEX, POSIZIONEY, nordUTM, estUTM, fuso);
+        calcolaunpunto_c(POSIZIONEX, POSIZIONEY, FUSO_EST, estGB, nordGB);
+        calcolaunpunto(h, POSIZIONEX, POSIZIONEY, estUTM, nordUTM, fuso);
+
         outfile.width(12); outfile.precision(3);
         outfile << fixed << right << estUTM <<'\r'<<endl;
         outfile.width(12); outfile.precision(3);
         outfile << fixed << right << nordUTM <<'\r'<<endl;
+
+        outgb.width(12); outgb.precision(3);
+        outgb << fixed << right << estGB << '\r' << endl;
+        outgb.width(12); outgb.precision(3);
+        outgb << fixed << right << nordGB << '\r' << endl;
         
       }
     }
     if ((*p).find("TESTO") != string::npos)
     {
       outfile << (*p).c_str() <<'\r'<<endl; //etichetta testo
+      outgb << (*p).c_str() << '\r' << endl; //etichetta testo
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//contenuto
+      outgb << (*p).c_str() << '\r' << endl;//contenuto
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//dimensione
+      outgb << (*p).c_str() << '\r' << endl;//dimensione
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//angolo
+      outgb << (*p).c_str() << '\r' << endl;//angolo
       p++;
       double estGB, nordGB;
       double  POSIZIONEX = atof((*p).c_str());
       p++;
       double  POSIZIONEY = atof((*p).c_str());
-      bool rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, nordUTM, estUTM, fuso);
+      calcolaunpunto_c(POSIZIONEX, POSIZIONEY, FUSO_EST, estGB, nordGB);
+      bool rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, estUTM, nordUTM, fuso);
       outfile.width(12); outfile.precision(3);
       outfile << fixed << right << estUTM <<'\r'<<endl;
       outfile.width(12); outfile.precision(3);
       outfile << fixed << right << nordUTM <<'\r'<<endl;
+
+      outgb.width(12); outgb.precision(3);
+      outgb << fixed << right << estGB << '\r' << endl;
+      outgb.width(12); outgb.precision(3);
+      outgb << fixed << right << nordGB << '\r' << endl;
     }
     if ((*p).find("SIMBOLO") != string::npos)
     {
       outfile << (*p).c_str() <<'\r'<<endl; //etichettaSIMBOLO
+      outgb << (*p).c_str() << '\r' << endl; //etichettaSIMBOLO
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//codice del simbolo
+      outgb << (*p).c_str() << '\r' << endl;//codice del simbolo
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//angolo
+      outgb << (*p).c_str() << '\r' << endl;//angolo
       p++;
       double estGB, nordGB;
       double  POSIZIONEX = atof((*p).c_str());
       p++;
       double  POSIZIONEY = atof((*p).c_str());
-      bool rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, nordUTM, estUTM, fuso);
+      calcolaunpunto_c(POSIZIONEX, POSIZIONEY, FUSO_EST, estGB, nordGB);
+      bool rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, estUTM, nordUTM, fuso);
       outfile.width(12); outfile.precision(3);
       outfile << fixed << right << estUTM <<'\r'<<endl;
       outfile.width(12); outfile.precision(3);
       outfile << fixed << right << nordUTM <<'\r'<<endl;
+
+      outgb.width(12); outgb.precision(3);
+      outgb << fixed << right << estGB << '\r' << endl;
+      outgb.width(12); outgb.precision(3);
+      outgb << fixed << right << nordGB << '\r' << endl;
     }
     if ((*p).find("FIDUCIALE") != string::npos)
     {
       outfile << (*p).c_str() <<'\r'<<endl; //etichetta FIDUCIALE
+      outgb << (*p).c_str() << '\r' << endl; //etichetta FIDUCIALE
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//codice del fiduciale
+      outgb << (*p).c_str() << '\r' << endl;//codice del fiduciale
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//angolo
+      outgb << (*p).c_str() << '\r' << endl;//angolo
       p++;
       double estGB, nordGB;
       double  POSIZIONEX = atof((*p).c_str());
       p++;
       double  POSIZIONEY = atof((*p).c_str());
-      int rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, nordUTM, estUTM, fuso);
+      calcolaunpunto_c(POSIZIONEX, POSIZIONEY, FUSO_EST, estGB, nordGB);
+      int rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, estUTM, nordUTM, fuso);
       outfile.width(12); outfile.precision(3);
       outfile << fixed << right << estUTM <<'\r'<<endl;
       outfile.width(12); outfile.precision(3);
       outfile << fixed << right << nordUTM <<'\r'<<endl;
+
+      outgb.width(12); outgb.precision(3);
+      outgb << fixed << right << estGB << '\r' << endl;
+      outgb.width(12); outgb.precision(3);
+      outgb << fixed << right << nordGB << '\r' << endl;
+
+
+
       p++;
       double  POSIZIONEPUNTOINTERNOX = atof((*p).c_str());
       p++;
       double  POSIZIONEPUNTOINTERNOY = atof((*p).c_str());
-      rt = calcolaunpunto(h,POSIZIONEPUNTOINTERNOX, POSIZIONEPUNTOINTERNOY, nordUTM, estUTM, fuso);
+      calcolaunpunto_c(POSIZIONEPUNTOINTERNOX, POSIZIONEPUNTOINTERNOY, FUSO_EST, estGB, nordGB);
+      rt = calcolaunpunto(h,POSIZIONEPUNTOINTERNOX, POSIZIONEPUNTOINTERNOY, estUTM, nordUTM, fuso);
       outfile.width(12); outfile.precision(3);
       outfile << fixed << right << estUTM <<'\r'<<endl;
       outfile.width(12); outfile.precision(3);
       outfile << fixed << right << nordUTM <<'\r'<<endl;
+
+      outgb.width(12); outgb.precision(3);
+      outgb << fixed << right << estGB << '\r' << endl;
+      outgb.width(12); outgb.precision(3);
+      outgb << fixed << right << nordGB << '\r' << endl;
     }
     if ((*p).find("LINEA") != string::npos)
     {
       outfile << (*p).c_str() <<'\r'<<endl; //LINEA
+      outgb << (*p).c_str() << '\r' << endl; //LINEA
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//tipo tratto
+      outgb << (*p).c_str() << '\r' << endl;//tipo tratto
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//numero vertici
+      outgb << (*p).c_str() << '\r' << endl;//numero vertici
       int num_vertici = atoi((*p).c_str());
       for (int i = 0; i < num_vertici; i++)
       {
@@ -1670,41 +1777,61 @@ nomefilecxf = filemp; nomefileout = fileout; nomefilelog = filelog; cartellageo 
         double POSIZIONEX = atof((*p).c_str());
         p++;
         double POSIZIONEY = atof((*p).c_str());
-        int rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, nordUTM, estUTM, fuso);
+        calcolaunpunto_c(POSIZIONEX, POSIZIONEY, FUSO_EST, estGB, nordGB);
+        int rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, estUTM, nordUTM, fuso);
         outfile.width(12); outfile.precision(3);
         outfile << fixed << right << estUTM <<'\r'<<endl;
         outfile.width(12); outfile.precision(3);
         outfile << fixed << right << nordUTM <<'\r'<<endl;
+
+        outgb.width(12); outgb.precision(3);
+        outgb << fixed << right << estGB << '\r' << endl;
+        outgb.width(12); outgb.precision(3);
+        outgb << fixed << right << nordGB << '\r' << endl;
 
       }
     }
     if ((*p).find("RIFERIMENTO_RASTER") != string::npos)
     {
       outfile << (*p).c_str() <<'\r'<<endl; //etichetta RIFERIMENTO_RASTER
+      outgb << (*p).c_str() << '\r' << endl; //etichetta RIFERIMENTO_RASTER
+
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//nome del RIFERIMENTO_RASTER
+      outgb << (*p).c_str() << '\r' << endl;//nome del RIFERIMENTO_RASTER
       for (int i = 0; i < 4; i++)
       {
         p++;
         double POSIZIONEX = atof((*p).c_str());
         p++;
         double POSIZIONEY = atof((*p).c_str());
-        int rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, nordUTM, estUTM, fuso);
+        calcolaunpunto_c(POSIZIONEX, POSIZIONEY, FUSO_EST, estGB, nordGB);
+        int rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, estUTM, nordUTM, fuso);
         outfile.width(12); outfile.precision(3);
         outfile << fixed << right << estUTM <<'\r'<<endl;
         outfile.width(12); outfile.precision(3);
         outfile << fixed << right << nordUTM <<'\r'<<endl;
+
+        outgb.width(12); outgb.precision(3);
+        outgb << fixed << right << estGB << '\r' << endl;
+        outgb.width(12); outgb.precision(3);
+        outgb << fixed << right << nordGB << '\r' << endl;
+
       }
     }
     if ((*p).find("LIBRETTO") != string::npos)
     {
       outfile << (*p).c_str() <<'\r'<<endl; //LIBRETTO
+      outgb << (*p).c_str() << '\r' << endl; //LIBRETTO
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//potocollo
+      outgb << (*p).c_str() << '\r' << endl;//potocollo
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//tipo tratto
+      outgb << (*p).c_str() << '\r' << endl;//tipo tratto
       p++;
       outfile << (*p).c_str() <<'\r'<<endl;//numero vertici
+      outgb << (*p).c_str() << '\r' << endl;//numero vertici
       int num_vertici = atoi((*p).c_str());
       for (int i = 0; i < num_vertici; i++)
       {
@@ -1712,11 +1839,16 @@ nomefilecxf = filemp; nomefileout = fileout; nomefilelog = filelog; cartellageo 
         double POSIZIONEX = atof((*p).c_str());
         p++;
         double POSIZIONEY = atof((*p).c_str());
-        int rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, nordUTM, estUTM, fuso);
+        calcolaunpunto_c(POSIZIONEX, POSIZIONEY, FUSO_EST, estGB, nordGB);
+        int rt = calcolaunpunto(h,POSIZIONEX, POSIZIONEY, estUTM, nordUTM, fuso);
         outfile.width(12); outfile.precision(3);
         outfile << fixed << right << estUTM <<'\r'<<endl;
         outfile.width(12); outfile.precision(3);
         outfile << fixed << right << nordUTM <<'\r'<<endl;
+        outgb.width(12); outgb.precision(3);
+        outgb << fixed << right << estGB << '\r' << endl;
+        outgb.width(12); outgb.precision(3);
+        outgb << fixed << right << nordGB << '\r' << endl;
       }
     }
   }
@@ -1724,6 +1856,9 @@ nomefilecxf = filemp; nomefileout = fileout; nomefilelog = filelog; cartellageo 
  
   outfile << "EOF" <<'\r'<<endl;
   outfile.close();
+  outgb << "EOF" << '\r' << endl;
+  outgb.close();
+
   logfile.close();
   gri_delete(h);
   return true;
@@ -1737,7 +1872,7 @@ bool DaPianeCSaFiLa(double est, double nord, double& la, double& fi, string & ms
   ms = c.messaggio;
   return true;
 }
-int  calcolaunpunto(double estCS, double nordCS, int fuso_richiesto, double& estGB, double& nordGB)
+int  calcolaunpunto_c(double estCS, double nordCS, int fuso_richiesto, double& estGB, double& nordGB)
 {
   Geodesia gi;
   double n = nordCS;
@@ -2294,7 +2429,7 @@ string removfirstblanck(string a)
 }
 
 
-bool  calcolaunpunto(GRI_HDR* hh, double nordcs, double estcs, double& nordutm, double& estutm, int& fuso)
+bool  calcolaunpunto(GRI_HDR* hh, double estcs, double nordcs, double& estutm, double& nordutm,int& fuso)
 {
  
   if (hh ==GRI_NULL)

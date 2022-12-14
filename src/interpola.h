@@ -1,5 +1,5 @@
 #pragma once
-
+#define linux
 #include <cstdio>
 #include <string>
 #include <iostream>
@@ -19,7 +19,7 @@
 #include <string.h>
 #include <ctype.h>
 using namespace std;
-
+#define GRI_NO_MUTEXES
 
 /* ------------------------------------------------------------------------- */
 /* public header for the libntv2 library                                     */
@@ -853,7 +853,7 @@ char* strip(char* str);
 /*------------------------------------------------------------------------
  * process all arguments
  */
-int process_args(
+ int process_args(
   GRI_HDR* hdr,
   int          optcnt,
   int          argc,
