@@ -85,13 +85,13 @@ python
 
 ```bash
 docker run -it -v "$(pwd):/tmp" --entrypoint "/bin/bash" geobeyond/etrflib
-python cxf2ctf.py /tmp/data/H501D076700.cxf
+etrflib convert --filepath /tmp/data/H501D076700.cxf
 ```
 
 or directly from your local console through a Docker command:
 
 ```bash
-docker run -it -v "$(pwd):/tmp" --entrypoint "/bin/bash" geobeyond/etrflib -c "python cxf2ctf.py /tmp/data/H501D076700.cxf"
+docker run -it -v "$(pwd)/data:/tmp/data" --entrypoint "/bin/bash" geobeyond/etrflib -c "etrflib convert --filepath /tmp/data/H501D076700.cxf --out-filename /tmp/data/H501D076700.ctf --log-filename /tmp/data/H501D076700.log --libdir /tmp/grids/41351139_42131301_R40_F00.gsb"
 ```
 
 ###### Remote transformation

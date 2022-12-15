@@ -1,0 +1,10 @@
+.git/
+app/
+data/
+!data/*.gsb
+docs/
+src/
+build.*
+Dockerfile*
+README.md
+setup.py

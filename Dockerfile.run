@@ -12,12 +12,14 @@ RUN poetry config virtualenvs.create false
 
 # Copy using poetry.lock* in case it doesn't exist yet
 RUN mkdir -p /tmp/app
+RUN mkdir -p /tmp/data
+RUN mkdir -p /tmp/grids
+WORKDIR /tmp/app
 COPY ./pyproject.toml ./poetry.lock* ./_dacsagb.so ./dacsagb.o ./interpola.o ./dacsagb.py /tmp/app/
 ADD etrflib /tmp/app/etrflib
-ADD data /tmp/data
+ADD data/*.gsb /tmp/grids/
 
 # install dependencies
-WORKDIR /tmp/app
 RUN poetry install --no-root --only main
 RUN poetry install
 
