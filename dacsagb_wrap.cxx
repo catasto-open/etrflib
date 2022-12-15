@@ -18117,6 +18117,66 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_calcolaunpunto_c(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  double arg1 ;
+  double arg2 ;
+  int arg3 ;
+  double *arg4 = 0 ;
+  double *arg5 = 0 ;
+  double val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  void *argp4 = 0 ;
+  int res4 = 0 ;
+  void *argp5 = 0 ;
+  int res5 = 0 ;
+  PyObject *swig_obj[5] ;
+  int result;
+  
+  if (!SWIG_Python_UnpackTuple(args, "calcolaunpunto_c", 5, 5, swig_obj)) SWIG_fail;
+  ecode1 = SWIG_AsVal_double(swig_obj[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "calcolaunpunto_c" "', argument " "1"" of type '" "double""'");
+  } 
+  arg1 = static_cast< double >(val1);
+  ecode2 = SWIG_AsVal_double(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "calcolaunpunto_c" "', argument " "2"" of type '" "double""'");
+  } 
+  arg2 = static_cast< double >(val2);
+  ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "calcolaunpunto_c" "', argument " "3"" of type '" "int""'");
+  } 
+  arg3 = static_cast< int >(val3);
+  res4 = SWIG_ConvertPtr(swig_obj[3], &argp4, SWIGTYPE_p_double,  0 );
+  if (!SWIG_IsOK(res4)) {
+    SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "calcolaunpunto_c" "', argument " "4"" of type '" "double &""'"); 
+  }
+  if (!argp4) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "calcolaunpunto_c" "', argument " "4"" of type '" "double &""'"); 
+  }
+  arg4 = reinterpret_cast< double * >(argp4);
+  res5 = SWIG_ConvertPtr(swig_obj[4], &argp5, SWIGTYPE_p_double,  0 );
+  if (!SWIG_IsOK(res5)) {
+    SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "calcolaunpunto_c" "', argument " "5"" of type '" "double &""'"); 
+  }
+  if (!argp5) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "calcolaunpunto_c" "', argument " "5"" of type '" "double &""'"); 
+  }
+  arg5 = reinterpret_cast< double * >(argp5);
+  result = (int)calcolaunpunto_c(arg1,arg2,arg3,*arg4,*arg5);
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN int Swig_var_nomefilegriglia_set(PyObject *_val) {
   {
     void *argp = 0;
@@ -18594,6 +18654,7 @@ static PyMethodDef SwigMethods[] = {
 	 { "est_nordGB_la_fiGB", _wrap_est_nordGB_la_fiGB, METH_VARARGS, NULL},
 	 { "removfirstblanck", _wrap_removfirstblanck, METH_O, NULL},
 	 { "calcolaunpunto", _wrap_calcolaunpunto, METH_VARARGS, NULL},
+	 { "calcolaunpunto_c", _wrap_calcolaunpunto_c, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 

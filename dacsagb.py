@@ -662,7 +662,10 @@ def est_nordGB_la_fiGB(estGB, nordGB, laGB, fiGB):
 def removfirstblanck(a):
     return _dacsagb.removfirstblanck(a)
 
-def calcolaunpunto(hh, nordcs, estcs, nordutm, estutm, fuso):
-    return _dacsagb.calcolaunpunto(hh, nordcs, estcs, nordutm, estutm, fuso)
+def calcolaunpunto(hh, nordcs, estcs, estutm, nordutm, fuso):
+    return _dacsagb.calcolaunpunto(hh, nordcs, estcs, estutm, nordutm, fuso)
+
+def calcolaunpunto_c(estCS, nordCS, fuso_richiesto, estGB, nordGB):
+    return _dacsagb.calcolaunpunto_c(estCS, nordCS, fuso_richiesto, estGB, nordGB)
 
 
