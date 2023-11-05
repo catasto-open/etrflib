@@ -11,10 +11,11 @@ RUN pip install poetry
 RUN poetry config virtualenvs.create false
 
 # Copy using poetry.lock* in case it doesn't exist yet
-COPY ./pyproject.toml ./poetry.lock* /tmp/
+RUN mkdir -p /tmp/app
+WORKDIR /tmp/app
+COPY ./../../pyproject.toml ./../../poetry.lock* /tmp/app/
 
 # install dependencies
-WORKDIR /tmp/
 RUN poetry install --no-root --only main
 RUN poetry install
 

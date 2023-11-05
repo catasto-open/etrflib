@@ -34,16 +34,22 @@ gcc -fPIC -std=c++17 -c src/dacsagb.cpp -Isrc dacsagb_wrap.cxx -isystem /usr/inc
 
 #### Linux Ubuntu 20.04
 
-Let's use the Docker image built from the local `Dockerfile`:
+Let's use the Docker image built from the local `Dockerfile`. We can use the following python build command:
 
 ```bash
-docker build --no-cache -t geobeyond/etrflib -f ./scripts/docker/Dockerfile .
+python scripts/docker/build.py --docker-platform linux/amd64
+```
+
+Alternatively, you can use the explicit `docker build` command:
+
+```bash
+docker build --no-cache -t ghcr.io/catasto-open/etrflib -f ./scripts/docker/Dockerfile .
 ```
 
 Run the container where we compile and execute the python library:
 
 ```bash
-docker run -it -v "$(pwd):/tmp" --entrypoint "/bin/bash" geobeyond/etrflib
+docker run -it -v "$(pwd):/tmp" --entrypoint "/bin/bash" ghcr.io/catasto-open/etrflib
 ```
 
 ##### Create the module
@@ -84,14 +90,14 @@ python
 ###### Local transformation
 
 ```bash
-docker run -it -v "$(pwd):/tmp" --entrypoint "/bin/bash" geobeyond/etrflib
+docker run -it -v "$(pwd):/tmp" --entrypoint "/bin/bash" ghcr.io/catasto-open/etrflib
 etrflib convert --filepath /tmp/data/H501D076700.cxf
 ```
 
 or directly from your local console through a Docker command:
 
 ```bash
-docker run -it -v "$(pwd)/data:/tmp/data" --entrypoint "/bin/bash" geobeyond/etrflib -c "etrflib convert --filepath /tmp/data/H501D076700.cxf --out-filename /tmp/data/H501D076700.ctf --log-filename /tmp/data/H501D076700.log --libdir /tmp/grids/41351139_42131301_R40_F00.gsb"
+docker run -it -v "$(pwd)/data:/tmp/data" --entrypoint "/bin/bash" ghcr.io/catasto-open/etrflib -c "etrflib convert --filepath /tmp/data/H501D076700.cxf --out-filename /tmp/data/H501D076700.ctf --log-filename /tmp/data/H501D076700.log --libdir /tmp/grids/41351139_42131301_R40_F00.gsb"
 ```
 
 ###### Remote transformation
@@ -99,7 +105,7 @@ docker run -it -v "$(pwd)/data:/tmp/data" --entrypoint "/bin/bash" geobeyond/etr
 For development:
 
 ```bash
-docker run -it -v "$(pwd):/tmp" --entrypoint /bin/bash --network prefect-network geobeyond/etrflib:0.0.1.dev
+docker run -it -v "$(pwd):/tmp" --entrypoint /bin/bash --network prefect-network ghcr.io/catasto-open/etrflib:devel
 # run the CLI
 etrflib remote-convert --bucket-path http://host.docker.internal:9000/sister --object-path 20112022 --filename H501B072500.cxf --destination-path H501B072500 --key e5NDexDVLlhTIvCd --secret xjnSuoApCzXQP4XLVFecULO4KoqOAduv
 ```
@@ -108,7 +114,9 @@ For production:
 
 ```bash
 # build the image
-docker build --no-cache -t geobeyond/etrflib -f ./scripts/docker/Dockerfile.run .
+python scripts/docker/build.py --dockerfile Dockerfile.run --docker-platform linux/amd64
+# or with the regular docker build command
+docker build --no-cache -t ghcr.io/catasto-open/etrflib -f ./scripts/docker/Dockerfile.run .
 # run the container
-docker run -it --entrypoint "/bin/bash" --network prefect-network geobeyond/etrflib -c "etrflib remote-convert --bucket-path http://nginx:9000/sister --object-path 20112022 --filename H501B072500.cxf --destination-path H501B072500 --key e5NDexDVLlhTIvCd --secret xjnSuoApCzXQP4XLVFecULO4KoqOAduv"
+docker run -it --entrypoint "/bin/bash" --network prefect-network ghcr.io/catasto-open/etrflib -c "etrflib remote-convert --bucket-path http://nginx:9000/sister --object-path 20112022 --filename H501B072500.cxf --destination-path H501B072500 --key e5NDexDVLlhTIvCd --secret xjnSuoApCzXQP4XLVFecULO4KoqOAduv"
 ```
