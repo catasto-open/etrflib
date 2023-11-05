@@ -37,7 +37,7 @@ gcc -fPIC -std=c++17 -c src/dacsagb.cpp -Isrc dacsagb_wrap.cxx -isystem /usr/inc
 Let's use the Docker image built from the local `Dockerfile`:
 
 ```bash
-docker build --no-cache -t geobeyond/etrflib .
+docker build --no-cache -t geobeyond/etrflib -f ./scripts/docker/Dockerfile .
 ```
 
 Run the container where we compile and execute the python library:
@@ -108,7 +108,7 @@ For production:
 
 ```bash
 # build the image
-docker build --no-cache -t geobeyond/etrflib -f Dockerfile.run .
+docker build --no-cache -t geobeyond/etrflib -f ./scripts/docker/Dockerfile.run .
 # run the container
 docker run -it --entrypoint "/bin/bash" --network prefect-network geobeyond/etrflib -c "etrflib remote-convert --bucket-path http://nginx:9000/sister --object-path 20112022 --filename H501B072500.cxf --destination-path H501B072500 --key e5NDexDVLlhTIvCd --secret xjnSuoApCzXQP4XLVFecULO4KoqOAduv"
 ```

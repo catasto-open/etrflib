@@ -6,10 +6,10 @@ from rich.markdown import Markdown
 import pyfiglet
 import typer
 import aiofiles
+import aiohttp
 from pydantic import BaseModel, FilePath, AnyUrl, validator
 from miniopy_async import Minio
 from aiohttp.client_exceptions import ClientConnectorError
-import dacsagb
 
 
 console = Console()
@@ -90,15 +90,24 @@ def convert(
         logfile = Path(log_filename)
     else:
         logfile = cxf_file.cxf.parent / f"{in_filename}.log"
-    p = dacsagb.dacsagb()
     with rich.progress.open(cxf_file.cxf, "r") as file:
-        result = p.calcolaCXF(
-            cxf_file.cxf.__str__(),
-            outfile.__str__(),
-            logfile.__str__(),
-            libdir.__str__(),
-            4
-        )
+        if in_filename[-1] == "0":
+            outfile.write_bytes(cxf_file.cxf.read_bytes())
+            logfile.write_text("File not converted with native gauss-boaga coordinates")
+            result = typer.Exit(code=0)
+        else:
+            try:
+                import dacsagb
+            except ImportError:
+                raise
+            p = dacsagb.dacsagb()
+            result = p.calcolaCXF(
+                cxf_file.cxf.__str__(),
+                outfile.__str__(),
+                logfile.__str__(),
+                libdir.__str__(),
+                4
+            )
     if result:
         console.print(Panel.fit(
             f"[green]ETRF file {outfile} is created![/green] :boom:",
@@ -130,13 +139,15 @@ async def convert_sfs(
     try:
         cxf_temp_file = Path(f"/tmp") / filename
         async with aiofiles.open(cxf_temp_file, mode='w') as cxfile:
-            cxf = await minio_client.get_object(
-                bucket_name,
-                filepath.__str__()           
-            )
-            content = await cxf.read()
-            await cxfile.write(content.decode())
-            cxf.close()
+            async with aiohttp.ClientSession() as session:
+                cxf = await minio_client.get_object(
+                    bucket_name,
+                    filepath.__str__(),
+                    session
+                )
+                content = await cxf.read()
+                await cxfile.write(content.decode())
+                cxf.close()
         ctf_filename = filename.replace("cxf", "ctf")
         log_filename = filename.replace("cxf", "log")
         dest_path = Path(f"/tmp") / destination_path
@@ -144,14 +155,23 @@ async def convert_sfs(
         ctf_temp_file = Path(f"/tmp") / dest_path / ctf_filename
         log_temp_file = Path(f"/tmp") / dest_path / log_filename
         libdir = Path(f"/tmp") / "data"
-        p = dacsagb.dacsagb()
-        result = p.calcolaCXF(
-            cxf_temp_file.__str__(),
-            ctf_temp_file.__str__(),
-            log_temp_file.__str__(),
-            libdir.__str__(),
-            4
-        )
+        if filename.replace(".cxf", "")[-1] == "0":
+            ctf_temp_file.write_bytes(cxf_temp_file.read_bytes())
+            log_temp_file.write_text("File not converted with native gauss-boaga coordinates")
+            result = typer.Exit(code=0)
+        else:
+            try:
+                import dacsagb
+            except ImportError:
+                raise
+            p = dacsagb.dacsagb()
+            result = p.calcolaCXF(
+                cxf_temp_file.__str__(),
+                ctf_temp_file.__str__(),
+                log_temp_file.__str__(),
+                libdir.__str__(),
+                4
+            )
         if result:
             async with aiofiles.open(cxf_temp_file, 'r') as cxffile:
                 upload_cxf = await minio_client.fput_object(
