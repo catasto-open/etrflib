@@ -91,7 +91,7 @@ def convert(
     else:
         logfile = cxf_file.cxf.parent / f"{in_filename}.log"
     with rich.progress.open(cxf_file.cxf, "r") as file:
-        if in_filename[-1] == "0":
+        if in_filename[-1] != "0":
             outfile.write_bytes(cxf_file.cxf.read_bytes())
             logfile.write_text("File not converted with native gauss-boaga coordinates")
             result = typer.Exit(code=0)
@@ -155,7 +155,7 @@ async def convert_sfs(
         ctf_temp_file = Path(f"/tmp") / dest_path / ctf_filename
         log_temp_file = Path(f"/tmp") / dest_path / log_filename
         libdir = Path(f"/tmp") / "data"
-        if filename.replace(".cxf", "")[-1] == "0":
+        if filename.replace(".cxf", "")[-1] != "0":
             ctf_temp_file.write_bytes(cxf_temp_file.read_bytes())
             log_temp_file.write_text("File not converted with native gauss-boaga coordinates")
             result = typer.Exit(code=0)

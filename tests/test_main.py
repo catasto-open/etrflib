@@ -11,8 +11,8 @@ local_data_dir = current_path / "data"
 
 
 def test_convert_gauss_boaga():
-    gauss_boaga_infile = local_data_dir / "H501D076700.cxf"
-    gauss_boaga_outfile = local_data_dir / "H501D076700.ctf"
+    gauss_boaga_infile = local_data_dir / "H501D07670X.cxf"
+    gauss_boaga_outfile = local_data_dir / "H501D07670X.ctf"
     result = runner.invoke(app, ["convert", "--filepath", gauss_boaga_infile.__str__()])
     assert result.exit_code == 0
     assert gauss_boaga_outfile.exists()
@@ -20,7 +20,7 @@ def test_convert_gauss_boaga():
 
 
 def test_convert_remote_gauss_boaga(run_minio_container):
-    gauss_boaga_infile = local_data_dir / "H501D076700.cxf"
+    gauss_boaga_infile = local_data_dir / "H501D07670X.cxf"
     # Create client with access and secret key
     client = Minio("localhost:9000", 
         "secret",  
@@ -37,7 +37,7 @@ def test_convert_remote_gauss_boaga(run_minio_container):
     # upload file to MinIO bucket
     client.fput_object(
         "etrflib",
-        "test/H501D076700.cxf",
+        "test/H501D07670X.cxf",
         gauss_boaga_infile
     )
     result = runner.invoke(
@@ -46,8 +46,8 @@ def test_convert_remote_gauss_boaga(run_minio_container):
             "remote-convert",
             "--bucket-path", "http://localhost:9000/etrflib",
             "--object-path", "test",
-            "--filename", "H501D076700.cxf",
-            "--destination-path", "H501D076700",
+            "--filename", "H501D07670X.cxf",
+            "--destination-path", "H501D07670X",
             "--key", "secret",
             "--secret", "secret123"
         ]
