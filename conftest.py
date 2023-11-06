@@ -2,7 +2,7 @@ import docker
 import pytest
 
 
-MINIO_TAG = "catastopen/minio:test"
+MINIO_TAG = "catasto-open/minio:test"
 INNER_PORT = 9000
 
 @pytest.fixture
