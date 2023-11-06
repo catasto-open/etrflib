@@ -41,7 +41,6 @@ def main(
 ):
     """Build the project's docker image."""
     logging.basicConfig(level=logging.INFO)
-    breakpoint()
     git_command = shutil.which("git")
     docker_command = shutil.which("docker")
     if git_command is None:
